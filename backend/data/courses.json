@@ -1,0 +1,90 @@
+[
+  {
+    "id": "C001",
+    "title": "Docker Fundamentals",
+    "skills": ["docker"],
+    "difficulty": "beginner",
+    "duration_hours": 4,
+    "prerequisites": [],
+    "provider": "Internal",
+    "description": "Containers, images, volumes, and compose basics",
+    "outcome": "Able to containerize a Python application"
+  },
+  {
+    "id": "C002",
+    "title": "SQL for Engineers",
+    "skills": ["sql"],
+    "difficulty": "beginner",
+    "duration_hours": 6,
+    "prerequisites": [],
+    "provider": "Internal",
+    "description": "Queries, joins, indexing, and query optimization",
+    "outcome": "Write complex queries and understand execution plans"
+  },
+  {
+    "id": "C003",
+    "title": "FastAPI in Practice",
+    "skills": ["fastapi", "python"],
+    "difficulty": "intermediate",
+    "duration_hours": 5,
+    "prerequisites": ["python"],
+    "provider": "Internal",
+    "description": "Build and deploy REST APIs with FastAPI",
+    "outcome": "Build a production-ready API with auth and docs"
+  },
+  {
+    "id": "C004",
+    "title": "AWS Core Services",
+    "skills": ["aws"],
+    "difficulty": "intermediate",
+    "duration_hours": 8,
+    "prerequisites": ["docker"],
+    "provider": "Internal",
+    "description": "EC2, S3, Lambda, IAM, and basic deployment",
+    "outcome": "Deploy a containerized service to AWS"
+  },
+  {
+    "id": "C005",
+    "title": "Power BI Dashboarding",
+    "skills": ["power_bi"],
+    "difficulty": "beginner",
+    "duration_hours": 5,
+    "prerequisites": ["excel"],
+    "provider": "Internal",
+    "description": "Data modeling, DAX basics, and visual design",
+    "outcome": "Publish an interactive dashboard"
+  },
+  {
+    "id": "C006",
+    "title": "Python Core",
+    "skills": ["python"],
+    "difficulty": "beginner",
+    "duration_hours": 8,
+    "prerequisites": [],
+    "provider": "Internal",
+    "description": "Data types, OOP, error handling, standard library",
+    "outcome": "Write clean, testable Python modules"
+  },
+  {
+    "id": "C007",
+    "title": "Kubernetes Essentials",
+    "skills": ["kubernetes"],
+    "difficulty": "advanced",
+    "duration_hours": 10,
+    "prerequisites": ["docker"],
+    "provider": "Internal",
+    "description": "Pods, services, deployments, Helm basics",
+    "outcome": "Deploy a multi-service app on a K8s cluster"
+  },
+  {
+    "id": "C008",
+    "title": "Machine Learning Foundations",
+    "skills": ["machine_learning"],
+    "difficulty": "intermediate",
+    "duration_hours": 12,
+    "prerequisites": ["python", "sql"],
+    "provider": "Internal",
+    "description": "Supervised learning, feature engineering, model evaluation",
+    "outcome": "Train and evaluate classification and regression models"
+  }
+]

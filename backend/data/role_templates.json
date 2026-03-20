@@ -1,0 +1,17 @@
+{
+  "backend engineer": {
+    "python": 3, "sql": 2, "docker": 2, "fastapi": 2, "git": 2
+  },
+  "data analyst": {
+    "sql": 3, "excel": 2, "power_bi": 2, "python": 1
+  },
+  "data engineer": {
+    "python": 3, "sql": 3, "spark": 2, "aws": 2, "docker": 2
+  },
+  "ml engineer": {
+    "python": 4, "machine_learning": 3, "docker": 2, "aws": 2, "sql": 2
+  },
+  "devops engineer": {
+    "docker": 3, "kubernetes": 3, "aws": 3, "python": 2, "git": 3
+  }
+}

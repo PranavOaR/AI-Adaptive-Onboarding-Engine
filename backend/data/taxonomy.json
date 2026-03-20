@@ -1,0 +1,16 @@
+{
+  "python": ["python", "py", "django", "flask", "fastapi"],
+  "sql": ["sql", "postgresql", "mysql", "sqlite", "postgres"],
+  "docker": ["docker", "containers", "containerization", "dockerfile"],
+  "aws": ["aws", "amazon web services", "ec2", "s3", "lambda"],
+  "react": ["react", "reactjs", "react.js", "jsx"],
+  "typescript": ["typescript", "ts"],
+  "machine_learning": ["machine learning", "ml", "scikit-learn", "sklearn"],
+  "power_bi": ["power bi", "powerbi", "microsoft bi"],
+  "excel": ["excel", "spreadsheet", "vlookup"],
+  "fastapi": ["fastapi", "fast api"],
+  "kubernetes": ["kubernetes", "k8s", "kubectl"],
+  "git": ["git", "github", "version control"],
+  "tableau": ["tableau"],
+  "spark": ["spark", "pyspark", "apache spark"]
+}
