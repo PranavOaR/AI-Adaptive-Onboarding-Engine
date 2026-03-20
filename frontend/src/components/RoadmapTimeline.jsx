@@ -4,19 +4,19 @@ import ChallengeArena from './ChallengeArena'
 import challenges from '../data/challenges.json'
 
 const PHASE_COLORS = {
-  Foundation: { border: 'border-mc-green', text: 'text-mc-green', bg: 'bg-mc-green', dot: 'bg-mc-green' },
-  'Core Role Skills': { border: 'border-mc-amber', text: 'text-mc-amber', bg: 'bg-mc-amber', dot: 'bg-mc-amber' },
-  'Applied Practice': { border: 'border-mc-cyan', text: 'text-mc-cyan', bg: 'bg-mc-cyan', dot: 'bg-mc-cyan' },
-  'Optional Stretch': { border: 'border-mc-text2', text: 'text-mc-text2', bg: 'bg-mc-text2', dot: 'bg-mc-text2' },
+  Foundation: { text: 'text-success', bg: 'bg-success', border: 'border-success' },
+  'Core Role Skills': { text: 'text-warning', bg: 'bg-warning', border: 'border-warning' },
+  'Applied Practice': { text: 'text-accent', bg: 'bg-accent', border: 'border-accent' },
+  'Optional Stretch': { text: 'text-text-dim', bg: 'bg-text-dim', border: 'border-text-dim' },
 }
 
-const DIFFICULTY_BADGE = {
-  beginner: 'badge-matched',
-  intermediate: 'badge-partial',
-  advanced: 'badge-missing',
+const DIFFICULTY_PILL = {
+  beginner: 'pill-success',
+  intermediate: 'pill-warning',
+  advanced: 'pill-error',
 }
 
-// Build skill → challenge ID lookup
+// Build skill -> challenge ID lookup
 const skillToChallengeId = {}
 challenges.forEach((ch) => {
   ch.skills.forEach((skill) => {
@@ -58,24 +58,25 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
 
   return (
     <>
-      <section ref={sectionRef} className="py-12 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-mc-cyan rounded-full" />
-              <h2 className="font-mono text-xs text-mc-cyan tracking-[0.2em] uppercase">
+      <section ref={sectionRef} className="py-14 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-xl font-semibold text-text-primary mb-1">
                 Learning Roadmap
               </h2>
+              <p className="text-sm text-text-muted">Personalized learning path based on your gaps</p>
             </div>
-            <div className="card-glow px-4 py-2">
-              <span className="font-mono text-[10px] text-mc-text2 mr-2">TOTAL</span>
-              <span ref={hoursRef} className="font-mono text-sm text-mc-cyan font-bold">
+            <div className="card-static px-4 py-2.5 flex items-center gap-2">
+              <span className="text-xs text-text-muted">Total</span>
+              <span ref={hoursRef} className="text-base font-bold text-accent">
                 0h
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Vertical timeline layout */}
+          <div className="space-y-10">
             {phaseOrder.map((phaseName) => {
               const courses = phases[phaseName]
               if (!courses) return null
@@ -83,89 +84,85 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
 
               return (
                 <div key={phaseName} className="reveal-item">
-                  <div className={`flex items-center gap-2 mb-4 pb-2 border-b ${colors.border}/30`}>
-                    <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
-                    <h3 className={`font-mono text-xs ${colors.text} tracking-wider uppercase`}>
+                  {/* Phase header */}
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className={`w-2.5 h-2.5 rounded-full ${colors.bg}`} />
+                    <h3 className={`text-lg font-semibold ${colors.text}`}>
                       {phaseName}
                     </h3>
+                    <div className="flex-1 h-px bg-border" />
                   </div>
 
-                  <div className="relative pl-4">
-                    {/* Vertical connector line */}
-                    <div className={`absolute left-0 top-0 bottom-0 w-px ${colors.bg}/30`} />
+                  {/* Course cards with left border connector */}
+                  <div className={`space-y-3 ml-5 border-l ${colors.border}/30 pl-6`}>
+                    {courses.map((course) => {
+                      const courseSkills = course.skills || course.skills_addressed || []
+                      const challengeSkill = courseSkills.find(
+                        (s) => skillToChallengeId[s] && gapSkills.has(s)
+                      )
+                      const challengeId = challengeSkill ? skillToChallengeId[challengeSkill] : null
 
-                    <div className="space-y-3">
-                      {courses.map((course) => {
-                        const courseSkills = course.skills || course.skills_addressed || []
-                        // Find a gap skill that has a challenge
-                        const challengeSkill = courseSkills.find(
-                          (s) => skillToChallengeId[s] && gapSkills.has(s)
-                        )
-                        const challengeId = challengeSkill ? skillToChallengeId[challengeSkill] : null
+                      return (
+                        <div key={course.id} className="card p-5 relative">
+                          {/* Dot on the connector line */}
+                          <div
+                            className={`absolute -left-[27px] top-6 w-2.5 h-2.5 rounded-full ${colors.bg} ring-2 ring-surface-0`}
+                          />
 
-                        return (
-                          <div key={course.id} className="card-glow p-4 relative">
-                            {/* Dot on the line */}
-                            <div
-                              className={`absolute -left-[17px] top-5 w-2 h-2 rounded-full ${colors.dot} ring-2 ring-mc-bg`}
-                            />
-
-                            <div className="flex items-start justify-between mb-2">
-                              <h4 className="font-mono text-sm text-mc-text font-bold leading-tight pr-2">
-                                {course.title}
-                              </h4>
-                              <span className={`badge ${DIFFICULTY_BADGE[course.difficulty] || ''} shrink-0`}>
-                                {course.difficulty}
-                              </span>
-                            </div>
-
-                            <div className="flex items-center gap-3 mb-2">
-                              <span className="font-mono text-[10px] text-mc-text2">
-                                {course.duration_hours}h
-                              </span>
-                              <span className="font-mono text-[10px] text-mc-text2">
-                                {course.id || course.course_id}
-                              </span>
-                            </div>
-
-                            <div className="flex flex-wrap gap-1 mb-3">
-                              {courseSkills.map((s) => (
-                                <span
-                                  key={s}
-                                  className="font-mono text-[9px] px-2 py-0.5 bg-mc-bg border border-mc-border rounded text-mc-text2"
-                                >
-                                  {s}
-                                </span>
-                              ))}
-                            </div>
-
-                            {course.prerequisites_needed?.length > 0 && (
-                              <div className="mb-2 font-mono text-[9px] text-mc-text2/50">
-                                REQUIRES: {course.prerequisites_needed.join(', ')}
-                              </div>
-                            )}
-
-                            {course.justification && (
-                              <div className="mb-4 text-xs text-mc-text2/80 font-body leading-relaxed border-l border-mc-border pl-2">
-                                {course.justification}
-                              </div>
-                            )}
-
-                            {challengeId && (
-                              <button
-                                onClick={() => setActiveChallengeId(challengeId)}
-                                className="w-full font-mono text-[10px] tracking-wider py-2 px-3
-                                  border border-mc-amber/50 text-mc-amber rounded
-                                  hover:bg-mc-amber/10 hover:border-mc-amber
-                                  transition-all duration-200"
-                              >
-                                CHALLENGE YOUR SKILLS →
-                              </button>
-                            )}
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="text-base font-medium text-text-primary leading-snug pr-2">
+                              {course.title}
+                            </h4>
+                            <span className={`pill ${DIFFICULTY_PILL[course.difficulty] || 'pill-neutral'} shrink-0`}>
+                              {course.difficulty}
+                            </span>
                           </div>
-                        )
-                      })}
-                    </div>
+
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="text-xs text-text-dim">
+                              {course.duration_hours}h
+                            </span>
+                            <span className="text-xs text-text-dim">
+                              {course.id || course.course_id}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-1.5 mb-3">
+                            {courseSkills.map((s) => (
+                              <span
+                                key={s}
+                                className="text-xs px-2.5 py-1 bg-surface-1 border border-border-subtle rounded-md text-text-muted"
+                              >
+                                {s.replace(/_/g, ' ')}
+                              </span>
+                            ))}
+                          </div>
+
+                          {course.prerequisites_needed?.length > 0 && (
+                            <p className="mb-2 text-xs text-text-dim">
+                              Requires: {course.prerequisites_needed.join(', ')}
+                            </p>
+                          )}
+
+                          {course.justification && (
+                            <p className="mb-4 text-sm text-text-muted leading-relaxed border-l-2 border-border pl-3">
+                              {course.justification}
+                            </p>
+                          )}
+
+                          {challengeId && (
+                            <button
+                              onClick={() => setActiveChallengeId(challengeId)}
+                              className="text-sm font-medium text-accent border border-accent/40 rounded-lg py-2.5 px-4
+                                hover:bg-accent/10 hover:border-accent
+                                transition-all duration-200"
+                            >
+                              Test your skills
+                            </button>
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )

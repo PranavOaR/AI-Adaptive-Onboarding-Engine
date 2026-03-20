@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 assessment_router.py — Semantic challenge routing for AI Onboarding Engine
 

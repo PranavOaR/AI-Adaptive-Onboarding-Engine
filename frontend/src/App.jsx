@@ -39,15 +39,15 @@ export default function App() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-mc-bg">
+      <div className="min-h-screen bg-surface-0">
         {state === 'analyzing' && <AnalysisProgress />}
 
         {(state === 'idle' || state === 'analyzing') && (
           <>
             <HeroUpload onSubmit={handleSubmit} />
             {error && (
-              <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 card-glow border-mc-red px-6 py-3">
-                <p className="font-mono text-xs text-mc-red">{error}</p>
+              <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 card-static border-error/30 bg-error/5 px-6 py-3">
+                <p className="text-sm text-error">{error}</p>
               </div>
             )}
           </>
@@ -56,33 +56,33 @@ export default function App() {
         {state === 'results' && data && (
           <>
             {/* Top bar */}
-            <div className="sticky top-0 z-40 bg-mc-bg/90 backdrop-blur border-b border-mc-border">
-              <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+            <div className="sticky top-0 z-40 bg-surface-1/90 backdrop-blur-md border-b border-border">
+              <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-mc-cyan tracking-[0.2em]">
-                    ONBOARDING ENGINE
+                  <span className="text-sm font-medium text-text-primary">
+                    Onboarding Engine
                   </span>
-                  <span className="font-mono text-[10px] text-mc-text2">
+                  <span className="text-xs text-text-dim">
                     {data.summary.total_skills_required} skills analyzed
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
                   {user && (
-                    <span className="font-mono text-[10px] text-mc-text2 hidden sm:inline">
+                    <span className="text-xs text-text-dim hidden sm:inline">
                       {user.email}
                     </span>
                   )}
                   <button
                     onClick={handleReset}
-                    className="font-mono text-[10px] text-mc-text2 hover:text-mc-cyan transition-colors tracking-wider"
+                    className="text-xs text-text-muted hover:text-text-primary transition-colors"
                   >
-                    NEW ANALYSIS
+                    New analysis
                   </button>
                   <button
                     onClick={logout}
-                    className="font-mono text-[10px] text-mc-red/70 hover:text-mc-red transition-colors tracking-wider"
+                    className="text-xs text-text-muted hover:text-error transition-colors"
                   >
-                    LOGOUT
+                    Log out
                   </button>
                 </div>
               </div>
@@ -96,10 +96,10 @@ export default function App() {
             <ReasoningPanel traces={data.reasoning_trace} />
 
             {/* Footer */}
-            <footer className="py-8 px-6 border-t border-mc-border">
-              <div className="max-w-5xl mx-auto text-center">
-                <p className="font-mono text-[10px] text-mc-text2/40 tracking-wider">
-                  AI ONBOARDING ENGINE &middot; MISSION CONTROL &middot; ALL DATA GROUNDED IN EVIDENCE
+            <footer className="py-10 px-6 border-t border-border">
+              <div className="max-w-6xl mx-auto text-center">
+                <p className="text-sm text-text-dim">
+                  AI Onboarding Engine &middot; Evidence-grounded skill analysis
                 </p>
               </div>
             </footer>

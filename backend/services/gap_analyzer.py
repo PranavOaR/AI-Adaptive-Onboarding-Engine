@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 gap_analyzer.py — Evidence-grounded gap analysis for AI Onboarding Engine
 

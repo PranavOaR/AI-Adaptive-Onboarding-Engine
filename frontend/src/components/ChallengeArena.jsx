@@ -9,10 +9,13 @@ import ScenarioChallenge from './ScenarioChallenge'
 import ConfigChallenge from './ConfigChallenge'
 
 const JUDGE0_LANGUAGE_IDS = { python: 71, javascript: 63, java: 62 }
-const DIFFICULTY_COLORS = {
-  easy: 'text-mc-green border-mc-green',
-  medium: 'text-mc-amber border-mc-amber',
-  hard: 'text-mc-red border-mc-red',
+const DIFFICULTY_PILL = {
+  easy: 'pill-success',
+  medium: 'pill-warning',
+  hard: 'pill-error',
+  beginner: 'pill-success',
+  intermediate: 'pill-warning',
+  advanced: 'pill-error',
 }
 
 export default function ChallengeArena({ challengeId, onClose }) {
@@ -29,22 +32,22 @@ export default function ChallengeArena({ challengeId, onClose }) {
 
     const term = new Terminal({
       theme: {
-        background: '#0A0C10',
-        foreground: '#E8EDF2',
-        cursor: '#00E5FF',
-        selectionBackground: '#1E2530',
-        black: '#0A0C10',
-        brightBlack: '#8896A6',
-        green: '#00E676',
-        brightGreen: '#00E676',
-        yellow: '#FFB300',
-        brightYellow: '#FFB300',
-        cyan: '#00E5FF',
-        brightCyan: '#00E5FF',
-        red: '#FF5252',
-        brightRed: '#FF5252',
+        background: '#111318',
+        foreground: '#D1D5DB',
+        cursor: '#818CF8',
+        selectionBackground: '#2A2D36',
+        black: '#111318',
+        brightBlack: '#6B7280',
+        green: '#34D399',
+        brightGreen: '#34D399',
+        yellow: '#FBBF24',
+        brightYellow: '#FBBF24',
+        cyan: '#818CF8',
+        brightCyan: '#818CF8',
+        red: '#F87171',
+        brightRed: '#F87171',
       },
-      fontFamily: '"Space Mono", monospace',
+      fontFamily: '"SF Mono", "Fira Code", "Cascadia Code", monospace',
       fontSize: 12,
       lineHeight: 1.5,
       cursorBlink: true,
@@ -57,10 +60,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
     term.open(termRef.current)
     fitAddon.fit()
 
-    term.writeln('\x1b[36m╔══════════════════════════════════════╗\x1b[0m')
-    term.writeln('\x1b[36m║   MISSION CONTROL — CODE TERMINAL    ║\x1b[0m')
-    term.writeln('\x1b[36m╚══════════════════════════════════════╝\x1b[0m')
-    term.writeln('\x1b[90m  Write your solution, then press RUN\x1b[0m\r\n')
+    term.writeln('\x1b[90mReady. Write your solution and press Run.\x1b[0m\r\n')
 
     xtermRef.current = term
     fitAddonRef.current = fitAddon
@@ -85,7 +85,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
     const term = xtermRef.current
 
     term.writeln('')
-    term.writeln('\x1b[33m▶ Submitting to Judge0 CE...\x1b[0m')
+    term.writeln('\x1b[33mSubmitting...\x1b[0m')
 
     try {
       const body = {
@@ -105,17 +105,17 @@ export default function ChallengeArena({ challengeId, onClose }) {
 
       term.writeln('')
       if (result.compile_output) {
-        term.writeln('\x1b[31m--- COMPILE ERROR ---\x1b[0m')
+        term.writeln('\x1b[31m--- Compile Error ---\x1b[0m')
         result.compile_output.split('\n').forEach((line) => term.writeln('\x1b[31m' + line + '\x1b[0m'))
       }
 
       if (result.stderr) {
-        term.writeln('\x1b[31m--- RUNTIME ERROR ---\x1b[0m')
+        term.writeln('\x1b[31m--- Runtime Error ---\x1b[0m')
         result.stderr.split('\n').forEach((line) => term.writeln('\x1b[31m' + line + '\x1b[0m'))
       }
 
       if (result.stdout) {
-        term.writeln('\x1b[32m--- OUTPUT ---\x1b[0m')
+        term.writeln('\x1b[32m--- Output ---\x1b[0m')
         result.stdout.split('\n').forEach((line) => term.writeln(line))
       }
 
@@ -123,7 +123,6 @@ export default function ChallengeArena({ challengeId, onClose }) {
         term.writeln('\x1b[90m(no output)\x1b[0m')
       }
 
-      // Verdict
       const expected = problem.testCases[0]?.expectedOutput?.trim()
       const actual = (result.stdout || '').trim()
       const firstLine = actual.split('\n')[0]
@@ -131,11 +130,11 @@ export default function ChallengeArena({ challengeId, onClose }) {
 
       term.writeln('')
       if (passed) {
-        term.writeln('\x1b[32m✓ VERDICT: ACCEPTED\x1b[0m')
+        term.writeln('\x1b[32mAccepted\x1b[0m')
       } else if (result.compile_output || result.stderr) {
-        term.writeln('\x1b[31m✗ VERDICT: ERROR\x1b[0m')
+        term.writeln('\x1b[31mError\x1b[0m')
       } else {
-        term.writeln('\x1b[31m✗ VERDICT: WRONG ANSWER\x1b[0m')
+        term.writeln('\x1b[31mWrong Answer\x1b[0m')
         if (expected) {
           term.writeln('\x1b[90m  Expected: ' + expected + '\x1b[0m')
           term.writeln('\x1b[90m  Got:      ' + firstLine + '\x1b[0m')
@@ -146,11 +145,11 @@ export default function ChallengeArena({ challengeId, onClose }) {
         term.writeln('\x1b[90m  Time: ' + result.time + 's | Memory: ' + (result.memory || '?') + 'KB\x1b[0m')
       }
     } catch (err) {
-      term.writeln('\x1b[31m✗ Connection error: ' + err.message + '\x1b[0m')
-      term.writeln('\x1b[90m  Judge0 CE public endpoint may be rate-limited. Try again.\x1b[0m')
+      term.writeln('\x1b[31mConnection error: ' + err.message + '\x1b[0m')
+      term.writeln('\x1b[90m  Judge0 CE may be rate-limited. Try again.\x1b[0m')
     }
 
-    term.writeln('\x1b[90m─────────────────────────────────────\x1b[0m\r\n')
+    term.writeln('\x1b[90m' + '\u2500'.repeat(36) + '\x1b[0m\r\n')
     setRunning(false)
   }
 
@@ -169,73 +168,73 @@ export default function ChallengeArena({ challengeId, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-mc-bg flex flex-col">
+    <div className="fixed inset-0 z-50 bg-surface-0 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-mc-border bg-mc-bg2 shrink-0">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-surface-1 shrink-0">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-mc-cyan tracking-[0.2em] uppercase">
-            Challenge Arena
+          <span className="text-sm font-medium text-text-primary">
+            Challenge
           </span>
-          <span className="font-mono text-[10px] text-mc-text2">{problem.id}</span>
-          <span className={`badge border font-mono text-[9px] px-2 py-0.5 ${DIFFICULTY_COLORS[problem.difficulty]}`}>
+          <span className="text-xs text-text-dim">{problem.id}</span>
+          <span className={`pill ${DIFFICULTY_PILL[problem.difficulty] || 'pill-neutral'}`}>
             {problem.difficulty}
           </span>
         </div>
         <button
           onClick={onClose}
-          className="font-mono text-sm text-mc-text2 hover:text-mc-red transition-colors px-3 py-1"
+          className="text-sm text-text-muted hover:text-error transition-colors px-3 py-1"
         >
-          ✕ CLOSE
+          Close
         </button>
       </div>
 
       {/* Body — 3 panels */}
       <div className="flex flex-1 overflow-hidden">
         {/* Panel 1: Problem sidebar */}
-        <div className="w-72 shrink-0 border-r border-mc-border overflow-y-auto p-4 space-y-4">
-          <h2 className="font-mono text-sm text-mc-cyan font-bold">{problem.title}</h2>
+        <div className="w-72 shrink-0 border-r border-border overflow-y-auto p-5 space-y-5 bg-surface-1">
+          <h2 className="text-base font-semibold text-text-primary">{problem.title}</h2>
 
-          <div className="text-xs text-mc-text2 font-body leading-relaxed whitespace-pre-wrap">
+          <div className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">
             {problem.description.replace(/`([^`]+)`/g, '$1')}
           </div>
 
           <div>
-            <p className="font-mono text-[10px] text-mc-text2 tracking-wider uppercase mb-2">
+            <p className="text-xs font-medium text-text-muted mb-2">
               Examples
             </p>
             {problem.examples.map((ex, i) => (
-              <div key={i} className="card-glow p-3 mb-2 text-[11px]">
-                <p className="font-mono text-mc-text2 mb-1">Input:</p>
-                <p className="font-mono text-mc-text bg-mc-bg px-2 py-1 rounded mb-2 text-[10px] break-all">
+              <div key={i} className="card-static p-3 mb-2">
+                <p className="text-xs text-text-muted mb-1">Input:</p>
+                <p className="text-xs text-text-primary bg-surface-0 px-2 py-1 rounded-md mb-2 break-all font-mono">
                   {ex.input}
                 </p>
-                <p className="font-mono text-mc-text2 mb-1">Output:</p>
-                <p className="font-mono text-mc-green bg-mc-bg px-2 py-1 rounded mb-2 text-[10px]">
+                <p className="text-xs text-text-muted mb-1">Output:</p>
+                <p className="text-xs text-success bg-surface-0 px-2 py-1 rounded-md mb-2 font-mono">
                   {ex.output}
                 </p>
-                <p className="text-mc-text2/70 font-body text-[10px]">{ex.explanation}</p>
+                <p className="text-xs text-text-dim leading-relaxed">{ex.explanation}</p>
               </div>
             ))}
           </div>
 
           <div>
-            <p className="font-mono text-[10px] text-mc-text2 tracking-wider uppercase mb-2">
+            <p className="text-xs font-medium text-text-muted mb-2">
               Constraints
             </p>
             <ul className="space-y-1">
               {problem.constraints.map((c, i) => (
-                <li key={i} className="font-mono text-[10px] text-mc-text2 flex gap-2">
-                  <span className="text-mc-cyan shrink-0">·</span> {c}
+                <li key={i} className="text-xs text-text-muted flex gap-2">
+                  <span className="text-text-dim shrink-0">-</span> {c}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5">
             {problem.tags.map((tag) => (
               <span
                 key={tag}
-                className="font-mono text-[9px] px-2 py-0.5 border border-mc-border text-mc-text2 rounded"
+                className="text-xs px-2 py-0.5 bg-surface-0 border border-border-subtle rounded-md text-text-dim"
               >
                 {tag}
               </span>
@@ -245,12 +244,11 @@ export default function ChallengeArena({ challengeId, onClose }) {
 
         {/* Panel 2: Monaco Editor */}
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Editor toolbar */}
-          <div className="flex items-center gap-3 px-4 py-2 border-b border-mc-border bg-mc-bg2 shrink-0">
+          <div className="flex items-center gap-3 px-4 py-2.5 border-b border-border bg-surface-1 shrink-0">
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="font-mono text-[11px] bg-mc-bg border border-mc-border text-mc-cyan px-3 py-1.5 rounded focus:outline-none focus:border-mc-cyan"
+              className="text-sm bg-surface-0 border border-border text-accent px-3 py-1.5 rounded-lg focus:outline-none focus:border-accent"
             >
               <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
@@ -260,17 +258,17 @@ export default function ChallengeArena({ challengeId, onClose }) {
             <button
               onClick={handleRun}
               disabled={running}
-              className={`font-mono text-[11px] tracking-wider px-4 py-1.5 rounded border transition-all duration-200 ${
+              className={`text-sm font-medium px-4 py-1.5 rounded-lg transition-colors ${
                 running
-                  ? 'border-mc-amber/40 text-mc-amber/40 cursor-not-allowed'
-                  : 'border-mc-amber text-mc-amber hover:bg-mc-amber/10'
+                  ? 'bg-accent/50 text-white/60 cursor-not-allowed'
+                  : 'bg-accent text-white hover:bg-accent-hover'
               }`}
             >
-              {running ? 'RUNNING...' : '▶ RUN'}
+              {running ? 'Running...' : 'Run'}
             </button>
 
-            <span className="font-mono text-[10px] text-mc-text2 ml-auto">
-              {problem.skills.map((s) => s.toUpperCase()).join(' · ')}
+            <span className="text-xs text-text-dim ml-auto">
+              {problem.skills.map((s) => s.replace(/_/g, ' ')).join(' / ')}
             </span>
           </div>
 
@@ -283,7 +281,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
               theme="vs-dark"
               options={{
                 fontSize: 13,
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: '"SF Mono", "Fira Code", "Cascadia Code", monospace',
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
                 lineNumbers: 'on',
@@ -298,10 +296,10 @@ export default function ChallengeArena({ challengeId, onClose }) {
         </div>
 
         {/* Panel 3: Xterm terminal */}
-        <div className="w-80 shrink-0 border-l border-mc-border flex flex-col bg-mc-bg">
-          <div className="px-4 py-2 border-b border-mc-border bg-mc-bg2 shrink-0">
-            <span className="font-mono text-[10px] text-mc-text2 tracking-wider uppercase">
-              Execution Output
+        <div className="w-80 shrink-0 border-l border-border flex flex-col bg-surface-0">
+          <div className="px-4 py-2.5 border-b border-border bg-surface-1 shrink-0">
+            <span className="text-xs font-medium text-text-muted">
+              Output
             </span>
           </div>
           <div ref={termRef} className="flex-1 overflow-hidden p-2" />

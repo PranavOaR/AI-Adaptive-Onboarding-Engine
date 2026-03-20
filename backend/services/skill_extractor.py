@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 skill_extractor.py — Section-aware skill extraction for AI Onboarding Engine
 

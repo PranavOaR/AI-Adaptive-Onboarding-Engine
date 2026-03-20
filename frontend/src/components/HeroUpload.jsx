@@ -16,9 +16,9 @@ const UploadZone = ({ label, accept, file, onFile, icon }) => {
 
   return (
     <div
-      className={`drop-zone flex flex-col items-center justify-center p-8 rounded cursor-pointer min-h-[200px] ${
+      className={`drop-zone flex flex-col items-center justify-center p-8 cursor-pointer min-h-[180px] ${
         dragOver ? 'drag-over' : ''
-      } ${file ? 'border-mc-cyan bg-mc-cyan/5' : ''}`}
+      } ${file ? 'border-accent bg-accent/5' : ''}`}
       onDragOver={(e) => {
         e.preventDefault()
         setDragOver(true)
@@ -34,14 +34,14 @@ const UploadZone = ({ label, accept, file, onFile, icon }) => {
         className="hidden"
         onChange={(e) => e.target.files[0] && onFile(e.target.files[0])}
       />
-      <div className="text-3xl mb-3 opacity-40">{icon}</div>
-      <p className="font-mono text-sm text-mc-text2 mb-1">{label}</p>
+      <div className="text-2xl mb-2 text-text-dim opacity-60">{icon}</div>
+      <p className="text-sm font-medium text-text-muted mb-1">{label}</p>
       {file ? (
-        <p className="font-mono text-xs text-mc-cyan mt-2 truncate max-w-[200px]">
+        <p className="text-xs text-accent mt-2 truncate max-w-[200px]">
           {file.name}
         </p>
       ) : (
-        <p className="text-xs text-mc-text2/50 mt-1">
+        <p className="text-xs text-text-dim mt-1">
           Drop file or click to browse
         </p>
       )}
@@ -63,64 +63,43 @@ export default function HeroUpload({ onSubmit }) {
   }
 
   return (
-    <section className="min-h-screen grid-bg flex flex-col items-center justify-center px-6 relative">
-      {/* Ambient particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-mc-cyan/20 rounded-full"
-            style={{
-              left: `${15 + i * 15}%`,
-              top: `${20 + (i % 3) * 25}%`,
-              animation: `float ${3 + i * 0.5}s ease-in-out infinite alternate`,
-            }}
-          />
-        ))}
-      </div>
-      <style>{`
-        @keyframes float {
-          from { transform: translateY(0px) scale(1); opacity: 0.3; }
-          to { transform: translateY(-20px) scale(1.5); opacity: 0.1; }
-        }
-      `}</style>
-
-      <div className="relative z-10 max-w-3xl w-full">
-        <div className="text-center mb-12">
-          <p className="font-mono text-xs text-mc-cyan tracking-[0.3em] uppercase mb-4">
+    <section className="min-h-screen bg-surface-0 flex flex-col items-center justify-center px-6 relative">
+      <div className="relative z-10 max-w-2xl w-full">
+        <div className="text-center mb-14">
+          <p className="text-sm font-medium text-accent tracking-wide mb-4">
             AI Onboarding Engine
           </p>
-          <h1 className="font-body text-4xl md:text-5xl font-light text-mc-text leading-tight mb-4">
+          <h1 className="text-4xl md:text-5xl font-semibold text-text-primary leading-tight mb-5">
             Show me who I am,
             <br />
-            <span className="font-semibold text-mc-cyan">who I need to be.</span>
+            <span className="text-accent">who I need to be.</span>
           </h1>
-          <p className="text-mc-text2 text-sm max-w-md mx-auto">
-            Upload your resume and a job description. Get a surgical, evidence-backed learning roadmap.
+          <p className="text-text-muted text-base max-w-lg mx-auto leading-relaxed">
+            Upload your resume and a job description to get an evidence-backed skill analysis and personalized learning roadmap.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <UploadZone
-            label="RESUME"
+            label="Resume"
             accept=".pdf,.docx,.txt"
             file={resumeFile}
             onFile={setResumeFile}
             icon="01"
           />
           {useTextInput ? (
-            <div className="drop-zone rounded p-4 flex flex-col">
+            <div className="drop-zone p-5 flex flex-col">
               <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-xs text-mc-text2">JOB DESCRIPTION</span>
+                <span className="text-sm font-medium text-text-muted">Job Description</span>
                 <button
-                  className="font-mono text-[10px] text-mc-cyan hover:underline"
+                  className="text-xs text-accent hover:text-accent-hover transition-colors"
                   onClick={() => setUseTextInput(false)}
                 >
-                  UPLOAD FILE
+                  Upload file instead
                 </button>
               </div>
               <textarea
-                className="flex-1 bg-transparent border border-mc-border rounded p-3 text-sm text-mc-text font-body resize-none focus:outline-none focus:border-mc-cyan min-h-[140px]"
+                className="flex-1 bg-surface-1 border border-border rounded-lg p-3 text-sm text-text-primary resize-none focus:outline-none focus:border-accent min-h-[130px]"
                 placeholder="Paste job description here..."
                 value={jdText}
                 onChange={(e) => setJdText(e.target.value)}
@@ -129,20 +108,20 @@ export default function HeroUpload({ onSubmit }) {
           ) : (
             <div className="relative">
               <UploadZone
-                label="JOB DESCRIPTION"
+                label="Job Description"
                 accept=".pdf,.docx,.txt"
                 file={jdFile}
                 onFile={setJdFile}
                 icon="02"
               />
               <button
-                className="absolute bottom-3 right-3 font-mono text-[10px] text-mc-cyan hover:underline"
+                className="absolute bottom-3 right-3 text-xs text-accent hover:text-accent-hover transition-colors"
                 onClick={(e) => {
                   e.stopPropagation()
                   setUseTextInput(true)
                 }}
               >
-                PASTE TEXT
+                Paste text instead
               </button>
             </div>
           )}
@@ -152,13 +131,13 @@ export default function HeroUpload({ onSubmit }) {
           <button
             disabled={!canSubmit}
             onClick={handleSubmit}
-            className={`font-mono text-sm tracking-widest px-10 py-3 rounded transition-all duration-300 ${
+            className={`text-sm font-medium px-10 py-3 rounded-lg transition-all duration-200 ${
               canSubmit
-                ? 'bg-mc-cyan/10 text-mc-cyan border border-mc-cyan hover:bg-mc-cyan/20 hover:shadow-[0_0_30px_rgba(0,229,255,0.15)]'
-                : 'bg-mc-border/30 text-mc-text2/40 border border-mc-border/50 cursor-not-allowed'
+                ? 'bg-accent text-white hover:bg-accent-hover'
+                : 'bg-surface-2 text-text-dim border border-border cursor-not-allowed'
             }`}
           >
-            RUN ANALYSIS &rarr;
+            Analyze
           </button>
         </div>
       </div>

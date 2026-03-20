@@ -5,19 +5,17 @@ import SignupPage from './SignupPage'
 
 function Spinner() {
   return (
-    <div className="fixed inset-0 bg-mc-bg flex items-center justify-center">
+    <div className="fixed inset-0 bg-surface-0 flex items-center justify-center">
       <div className="text-center">
-        <div className="w-10 h-10 mx-auto mb-4 relative">
-          <div className="absolute inset-0 border-2 border-mc-border rounded-full" />
+        <div className="w-8 h-8 mx-auto mb-4 relative">
+          <div className="absolute inset-0 border-2 border-border rounded-full" />
           <div
-            className="absolute inset-0 border-2 border-transparent border-t-mc-cyan rounded-full"
+            className="absolute inset-0 border-2 border-transparent border-t-accent rounded-full"
             style={{ animation: 'spin 1s linear infinite' }}
           />
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        <p className="font-mono text-[10px] text-mc-text2 tracking-[0.2em] uppercase">
-          Authenticating
-        </p>
+        <p className="text-sm text-text-muted">Loading...</p>
       </div>
     </div>
   )

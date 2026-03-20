@@ -17,7 +17,7 @@ function RadialGauge({ score }) {
   }, [offset, circumference])
 
   const color =
-    score >= 70 ? 'var(--accent-green)' : score >= 40 ? 'var(--accent-amber)' : 'var(--accent-red)'
+    score >= 70 ? 'var(--success)' : score >= 40 ? 'var(--warning)' : 'var(--error)'
 
   return (
     <div className="relative w-36 h-36">
@@ -45,8 +45,8 @@ function RadialGauge({ score }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-mono text-2xl font-bold text-mc-text">{Math.round(score)}%</span>
-        <span className="font-mono text-[9px] text-mc-text2 tracking-wider">READINESS</span>
+        <span className="text-3xl font-bold text-text-primary">{Math.round(score)}%</span>
+        <span className="text-xs text-text-muted mt-0.5">Readiness</span>
       </div>
     </div>
   )
@@ -59,11 +59,11 @@ function StatChip({ value, label, color }) {
   }, [value])
 
   return (
-    <div className="card-glow px-4 py-3 text-center min-w-[100px]">
-      <div ref={ref} className="font-mono text-xl font-bold" style={{ color }}>
+    <div className="card px-5 py-4 text-center min-w-[100px]">
+      <div ref={ref} className="text-2xl font-bold" style={{ color }}>
         0
       </div>
-      <div className="font-mono text-[9px] text-mc-text2 tracking-wider uppercase mt-1">
+      <div className="text-xs text-text-muted mt-1">
         {label}
       </div>
     </div>
@@ -75,15 +75,17 @@ export default function SummaryBanner({ summary }) {
 
   return (
     <section className="py-16 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex items-center gap-2 mb-8">
-          <div className="w-2 h-2 bg-mc-cyan rounded-full" />
-          <h2 className="font-mono text-xs text-mc-cyan tracking-[0.2em] uppercase">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold text-text-primary mb-1">
             Analysis Summary
           </h2>
+          <p className="text-sm text-text-muted">
+            Overview of your skill alignment with the target role
+          </p>
         </div>
 
-        <div className="card-glow p-8">
+        <div className="card-static p-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <RadialGauge score={summary.readiness_score} />
 
@@ -92,52 +94,47 @@ export default function SummaryBanner({ summary }) {
                 <StatChip
                   value={summary.matched_count}
                   label="Matched"
-                  color="var(--accent-green)"
+                  color="var(--success)"
                 />
                 <StatChip
                   value={summary.partial_count}
                   label="Partial"
-                  color="var(--accent-amber)"
+                  color="var(--warning)"
                 />
                 <StatChip
                   value={summary.missing_count}
                   label="Missing"
-                  color="var(--accent-red)"
+                  color="var(--error)"
                 />
                 <StatChip
                   value={summary.estimated_learning_hours}
                   label="Hours"
-                  color="var(--accent-cyan)"
+                  color="var(--accent)"
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2">
                 {summary.detected_role && (
-                  <div className="flex items-center gap-2 border border-mc-cyan px-3 py-1 bg-mc-cyan/5 rounded">
-                    <span className="font-mono text-[10px] tracking-wider text-mc-cyan">
-                      {summary.role_display_name?.toUpperCase() || summary.detected_role.toUpperCase()}
+                  <span className="pill pill-accent">
+                    {summary.role_display_name || summary.detected_role.replace(/_/g, ' ')}
+                    <span className="opacity-60 ml-1">
+                      {Math.round(summary.role_confidence * 100)}%
                     </span>
-                    <span className="font-mono text-[10px] text-mc-cyan border-l border-mc-cyan/30 pl-2">
-                       CONF: {Math.round(summary.role_confidence * 100)}%
-                    </span>
-                  </div>
+                  </span>
                 )}
                 {summary.role_candidates?.length > 1 && (
-                  <div className="flex items-center gap-2 ml-2">
-                    <span className="font-mono text-[8px] text-mc-text2 uppercase tracking-widest mr-1">Other Matches:</span>
+                  <>
                     {summary.role_candidates.slice(1, 3).map(c => (
-                      <span key={c.role_id} className="font-mono text-[8px] text-mc-text2/70 border border-mc-border px-1.5 py-0.5 rounded">
-                        {c.display_name} ({Math.round(c.confidence * 100)}%)
+                      <span key={c.role_id} className="pill pill-neutral">
+                        {c.display_name}
+                        <span className="opacity-60 ml-1">{Math.round(c.confidence * 100)}%</span>
                       </span>
                     ))}
-                  </div>
+                  </>
                 )}
                 {summary.top_gaps?.map((gap) => (
-                  <span
-                    key={gap}
-                    className="font-mono text-[10px] tracking-wider px-3 py-1 border border-mc-red/50 text-mc-red rounded"
-                  >
-                    GAP: {gap.toUpperCase()}
+                  <span key={gap} className="pill pill-error">
+                    {gap.replace(/_/g, ' ')}
                   </span>
                 ))}
               </div>

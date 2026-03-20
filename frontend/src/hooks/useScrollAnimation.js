@@ -14,16 +14,16 @@ export function useScrollReveal(ref, options = {}) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         targets,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 24 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.12,
+          duration: 0.5,
+          stagger: 0.08,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
+            start: 'top 88%',
             toggleActions: 'play none none none',
             ...options,
           },
@@ -50,7 +50,7 @@ export function animateCount(el, to, suffix = '') {
 
 export function animateBars(container) {
   if (!container) return
-  const bars = container.querySelectorAll('.skill-bar-fill')
+  const bars = container.querySelectorAll('.bar-fill')
   bars.forEach((bar, i) => {
     const width = bar.dataset.width || 0
     gsap.to(bar, {

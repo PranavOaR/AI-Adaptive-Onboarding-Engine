@@ -1,13 +1,16 @@
 import { useState } from 'react'
 
-const DIFFICULTY_COLORS = {
-  easy: 'text-mc-green border-mc-green',
-  medium: 'text-mc-amber border-mc-amber',
-  hard: 'text-mc-red border-mc-red',
+const DIFFICULTY_PILL = {
+  easy: 'pill-success',
+  medium: 'pill-warning',
+  hard: 'pill-error',
+  beginner: 'pill-success',
+  intermediate: 'pill-warning',
+  advanced: 'pill-error',
 }
 
 export default function MCQChallenge({ challenge, onClose }) {
-  const [answers, setAnswers] = useState({}) // questionId -> selectedIndex
+  const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(null)
 
@@ -35,59 +38,55 @@ export default function MCQChallenge({ challenge, onClose }) {
   }
 
   const pct = score ? Math.round((score.correct / score.total) * 100) : 0
-  const scoreColor = pct >= 75 ? 'text-mc-green' : pct >= 50 ? 'text-mc-amber' : 'text-mc-red'
+  const scoreColor = pct >= 75 ? 'text-success' : pct >= 50 ? 'text-warning' : 'text-error'
 
   return (
-    <div className="fixed inset-0 z-50 bg-mc-bg flex flex-col">
+    <div className="fixed inset-0 z-50 bg-surface-0 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-mc-border bg-mc-bg2 shrink-0">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-surface-1 shrink-0">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-mc-cyan tracking-[0.2em] uppercase">
+          <span className="text-sm font-medium text-text-primary">
             MCQ Assessment
           </span>
-          <span className="font-mono text-[10px] text-mc-text2">{challenge.id}</span>
-          <span className={`badge border font-mono text-[9px] px-2 py-0.5 ${DIFFICULTY_COLORS[challenge.difficulty] || ''}`}>
+          <span className="text-xs text-text-dim">{challenge.id}</span>
+          <span className={`pill ${DIFFICULTY_PILL[challenge.difficulty] || 'pill-neutral'}`}>
             {challenge.difficulty}
-          </span>
-          <span className="font-mono text-[9px] text-mc-text2/60 border border-mc-border px-2 py-0.5 rounded">
-            MCQ
           </span>
         </div>
         <button
           onClick={onClose}
-          className="font-mono text-sm text-mc-text2 hover:text-mc-red transition-colors px-3 py-1"
+          className="text-sm text-text-muted hover:text-error transition-colors px-3 py-1"
         >
-          ✕ CLOSE
+          Close
         </button>
       </div>
 
       {/* Body */}
       <div className="flex-1 overflow-y-auto p-6 max-w-3xl mx-auto w-full">
-        {/* Challenge title & description */}
-        <div className="mb-6">
-          <h2 className="font-mono text-lg text-mc-cyan font-bold mb-2">{challenge.title}</h2>
-          <p className="text-sm text-mc-text2 font-body leading-relaxed">{challenge.description}</p>
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-text-primary mb-2">{challenge.title}</h2>
+          <p className="text-sm text-text-muted leading-relaxed">{challenge.description}</p>
         </div>
 
         {/* Score banner */}
         {submitted && score && (
-          <div className={`card-glow border mb-6 p-4 flex items-center gap-4 ${
-            pct >= 75 ? 'border-mc-green/50' : pct >= 50 ? 'border-mc-amber/50' : 'border-mc-red/50'
+          <div className={`card-static mb-6 p-5 flex items-center gap-4 ${
+            pct >= 75 ? 'border-success/30' : pct >= 50 ? 'border-warning/30' : 'border-error/30'
           }`}>
-            <span className={`font-mono text-3xl font-bold ${scoreColor}`}>
+            <span className={`text-3xl font-bold ${scoreColor}`}>
               {score.correct}/{score.total}
             </span>
             <div>
-              <div className={`font-mono text-sm ${scoreColor}`}>
-                {pct >= 75 ? '✓ PASSED' : pct >= 50 ? '◐ PARTIAL' : '✗ NEEDS REVIEW'}
+              <div className={`text-base font-medium ${scoreColor}`}>
+                {pct >= 75 ? 'Passed' : pct >= 50 ? 'Partial' : 'Needs review'}
               </div>
-              <div className="font-mono text-[10px] text-mc-text2">{pct}% correct</div>
+              <div className="text-xs text-text-dim">{pct}% correct</div>
             </div>
             <button
               onClick={handleReset}
-              className="ml-auto font-mono text-[10px] text-mc-cyan border border-mc-cyan/50 px-3 py-1 rounded hover:bg-mc-cyan/10"
+              className="ml-auto text-sm text-accent border border-accent/40 px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
             >
-              RETRY
+              Retry
             </button>
           </div>
         )}
@@ -97,54 +96,51 @@ export default function MCQChallenge({ challenge, onClose }) {
           {questions.map((q, qi) => {
             const selected = answers[q.id]
             const isAnswered = selected !== undefined
-            const isCorrect = submitted && selected === q.correct_index
-            const isWrong = submitted && isAnswered && !isCorrect
 
             return (
-              <div key={q.id} className="card-glow p-5">
+              <div key={q.id} className="card-static p-6">
                 <div className="flex items-start gap-3 mb-4">
-                  <span className="font-mono text-[10px] text-mc-cyan bg-mc-bg2 px-2 py-0.5 rounded shrink-0 mt-0.5">
+                  <span className="text-xs font-medium text-accent bg-surface-1 px-2.5 py-1 rounded-md shrink-0 mt-0.5">
                     Q{qi + 1}
                   </span>
-                  <p className="font-mono text-sm text-mc-text leading-relaxed whitespace-pre-line">
+                  <p className="text-sm text-text-primary leading-relaxed whitespace-pre-line">
                     {q.text}
                   </p>
                 </div>
 
-                <div className="space-y-2 pl-6">
+                <div className="space-y-2 pl-8">
                   {q.options.map((opt, idx) => {
                     const isSelected = selected === idx
                     const isRealCorrect = submitted && idx === q.correct_index
 
-                    let optStyle = 'border-mc-border text-mc-text2 hover:border-mc-cyan/50'
+                    let optStyle = 'border-border text-text-body hover:border-accent/50'
                     if (!submitted && isSelected) {
-                      optStyle = 'border-mc-cyan text-mc-cyan bg-mc-cyan/5'
+                      optStyle = 'border-accent text-accent bg-accent/5'
                     } else if (submitted && isRealCorrect) {
-                      optStyle = 'border-mc-green text-mc-green bg-mc-green/5'
+                      optStyle = 'border-success text-success bg-success/5'
                     } else if (submitted && isSelected && !isRealCorrect) {
-                      optStyle = 'border-mc-red text-mc-red bg-mc-red/5'
+                      optStyle = 'border-error text-error bg-error/5'
                     }
 
                     return (
                       <button
                         key={idx}
                         onClick={() => handleSelect(q.id, idx)}
-                        className={`w-full text-left px-4 py-2.5 rounded border font-mono text-[11px] transition-all duration-150 ${optStyle} ${!submitted ? 'cursor-pointer' : 'cursor-default'}`}
+                        className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-150 ${optStyle} ${!submitted ? 'cursor-pointer' : 'cursor-default'}`}
                       >
-                        <span className="text-mc-text2/50 mr-3">{String.fromCharCode(65 + idx)}.</span>
+                        <span className="text-text-dim mr-3">{String.fromCharCode(65 + idx)}.</span>
                         {opt}
-                        {submitted && isRealCorrect && <span className="ml-2 text-mc-green">✓</span>}
-                        {submitted && isSelected && !isRealCorrect && <span className="ml-2 text-mc-red">✗</span>}
+                        {submitted && isRealCorrect && <span className="ml-2 text-success">\u2713</span>}
+                        {submitted && isSelected && !isRealCorrect && <span className="ml-2 text-error">\u2717</span>}
                       </button>
                     )
                   })}
                 </div>
 
-                {/* Explanation */}
                 {submitted && q.explanation && (
-                  <div className="mt-3 pl-6 p-3 bg-mc-bg2 border-l-2 border-mc-cyan/40 rounded-r">
-                    <p className="font-mono text-[10px] text-mc-cyan mb-1">EXPLANATION</p>
-                    <p className="text-xs text-mc-text2 font-body leading-relaxed">{q.explanation}</p>
+                  <div className="mt-4 ml-8 p-4 bg-surface-1 border-l-2 border-accent/30 rounded-r-lg">
+                    <p className="text-xs font-semibold text-accent uppercase tracking-wide mb-1">Explanation</p>
+                    <p className="text-sm text-text-muted leading-relaxed">{q.explanation}</p>
                   </div>
                 )}
               </div>
@@ -154,17 +150,17 @@ export default function MCQChallenge({ challenge, onClose }) {
 
         {/* Submit button */}
         {!submitted && (
-          <div className="mt-6 flex justify-end">
+          <div className="mt-8 flex justify-end">
             <button
               onClick={handleSubmit}
               disabled={Object.keys(answers).length < questions.length}
-              className={`font-mono text-sm tracking-wider px-6 py-2.5 border rounded transition-all ${
+              className={`text-sm font-medium px-6 py-3 rounded-lg transition-colors ${
                 Object.keys(answers).length >= questions.length
-                  ? 'border-mc-cyan text-mc-cyan hover:bg-mc-cyan/10'
-                  : 'border-mc-border text-mc-text2/40 cursor-not-allowed'
+                  ? 'bg-accent text-white hover:bg-accent-hover'
+                  : 'bg-surface-2 text-text-dim border border-border cursor-not-allowed'
               }`}
             >
-              SUBMIT ANSWERS ({Object.keys(answers).length}/{questions.length})
+              Submit answers ({Object.keys(answers).length}/{questions.length})
             </button>
           </div>
         )}

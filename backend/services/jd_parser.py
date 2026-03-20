@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 jd_parser.py — JD Section Parser for AI Onboarding Engine
 

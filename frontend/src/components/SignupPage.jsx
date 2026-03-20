@@ -27,35 +27,35 @@ export default function SignupPage({ onSwitch }) {
   }
 
   return (
-    <div className="min-h-screen grid-bg flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-surface-0 flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <p className="font-mono text-[10px] text-mc-cyan tracking-[0.4em] uppercase mb-3">
+          <p className="text-sm font-medium text-accent tracking-wide mb-3">
             AI Onboarding Engine
           </p>
-          <h1 className="font-mono text-2xl text-mc-text font-bold tracking-wide">
-            CREATE ACCOUNT
+          <h1 className="text-2xl font-semibold text-text-primary">
+            Create account
           </h1>
-          <p className="text-mc-text2 text-xs mt-2 font-body">Initialize your operator profile</p>
+          <p className="text-text-muted text-sm mt-2">Get started with your onboarding analysis</p>
         </div>
 
-        <div className="card-glow p-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="card-static p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="font-mono text-[10px] text-mc-text2 tracking-wider uppercase block mb-1">
+              <label className="text-sm font-medium text-text-muted block mb-1.5">
                 Name
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-mc-bg border border-mc-border rounded px-3 py-2.5 text-sm text-mc-text font-body focus:outline-none focus:border-mc-cyan transition-colors"
-                placeholder="Operator name"
+                className="w-full bg-surface-1 border border-border rounded-lg px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors"
+                placeholder="Your name"
               />
             </div>
 
             <div>
-              <label className="font-mono text-[10px] text-mc-text2 tracking-wider uppercase block mb-1">
+              <label className="text-sm font-medium text-text-muted block mb-1.5">
                 Email
               </label>
               <input
@@ -63,13 +63,13 @@ export default function SignupPage({ onSwitch }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-mc-bg border border-mc-border rounded px-3 py-2.5 text-sm text-mc-text font-body focus:outline-none focus:border-mc-cyan transition-colors"
-                placeholder="ops@mission.ctrl"
+                className="w-full bg-surface-1 border border-border rounded-lg px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors"
+                placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label className="font-mono text-[10px] text-mc-text2 tracking-wider uppercase block mb-1">
+              <label className="text-sm font-medium text-text-muted block mb-1.5">
                 Password
               </label>
               <input
@@ -77,13 +77,13 @@ export default function SignupPage({ onSwitch }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-mc-bg border border-mc-border rounded px-3 py-2.5 text-sm text-mc-text font-body focus:outline-none focus:border-mc-cyan transition-colors"
+                className="w-full bg-surface-1 border border-border rounded-lg px-4 py-3 text-sm text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors"
                 placeholder="Min. 6 characters"
               />
             </div>
 
             {error && (
-              <p className="font-mono text-[11px] text-mc-red border border-mc-red/30 rounded px-3 py-2">
+              <p className="text-sm text-error bg-error/10 border border-error/20 rounded-lg px-4 py-3">
                 {error}
               </p>
             )}
@@ -91,22 +91,21 @@ export default function SignupPage({ onSwitch }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full font-mono text-sm tracking-widest py-3 rounded transition-all duration-200 mt-2
-                bg-mc-cyan/10 text-mc-cyan border border-mc-cyan
-                hover:bg-mc-cyan/20 hover:shadow-[0_0_20px_rgba(0,229,255,0.12)]
+              className="w-full text-sm font-medium py-3 rounded-lg transition-colors mt-1
+                bg-accent text-white hover:bg-accent-hover
                 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {loading ? 'INITIALIZING...' : 'INITIALIZE ACCOUNT →'}
+              {loading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <span className="font-mono text-[10px] text-mc-text2">Have an account? </span>
+            <span className="text-sm text-text-muted">Have an account? </span>
             <button
               onClick={onSwitch}
-              className="font-mono text-[10px] text-mc-cyan hover:underline"
+              className="text-sm text-accent hover:text-accent-hover transition-colors"
             >
-              SIGN IN
+              Sign in
             </button>
           </div>
         </div>

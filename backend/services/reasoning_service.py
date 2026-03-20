@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 reasoning_service.py — Evidence-grounded reasoning traces for each roadmap item.
 

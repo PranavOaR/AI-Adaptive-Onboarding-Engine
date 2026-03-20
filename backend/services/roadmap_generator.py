@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 roadmap_generator.py — 4-phase roadmap generation for AI Onboarding Engine
 
