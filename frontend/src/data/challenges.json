@@ -1,232 +1,153 @@
 [
   {
     "id": "CH001",
-    "title": "Two Sum",
-    "difficulty": "easy",
-    "skills": ["python"],
-    "description": "Given an array of integers `nums` and an integer `target`, return the **indices** of the two numbers that add up to `target`.\n\nYou may not use the same element twice. Assume exactly one solution exists.",
-    "examples": [
-      {
-        "input": "nums = [2, 7, 11, 15], target = 9",
-        "output": "[0, 1]",
-        "explanation": "nums[0] + nums[1] = 2 + 7 = 9, so return [0, 1]"
-      },
-      {
-        "input": "nums = [3, 2, 4], target = 6",
-        "output": "[1, 2]",
-        "explanation": "nums[1] + nums[2] = 2 + 4 = 6"
-      }
-    ],
-    "constraints": [
-      "2 ≤ nums.length ≤ 10⁴",
-      "-10⁹ ≤ nums[i] ≤ 10⁹",
-      "Exactly one valid answer exists",
-      "Expected time: O(n)"
-    ],
-    "starterCode": {
-      "python": "def two_sum(nums, target):\n    # Your code here\n    # Hint: Use a hash map for O(n) solution\n    pass\n\n# Test\nprint(two_sum([2, 7, 11, 15], 9))   # Expected: [0, 1]\nprint(two_sum([3, 2, 4], 6))         # Expected: [1, 2]",
-      "javascript": "function twoSum(nums, target) {\n  // Your code here\n}\n\nconsole.log(JSON.stringify(twoSum([2, 7, 11, 15], 9)));  // [0, 1]\nconsole.log(JSON.stringify(twoSum([3, 2, 4], 6)));        // [1, 2]",
-      "java": "import java.util.*;\npublic class Main {\n  public static int[] twoSum(int[] nums, int target) {\n    // Your code here\n    return new int[]{};\n  }\n  public static void main(String[] args) {\n    System.out.println(Arrays.toString(twoSum(new int[]{2,7,11,15}, 9)));\n    System.out.println(Arrays.toString(twoSum(new int[]{3,2,4}, 6)));\n  }\n}"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "[0, 1]" }
-    ],
-    "tags": ["arrays", "hash-map", "O(n)"]
+    "title": "Two Sum Optimization",
+    "description": "Optimize a naive O(N^2) Two Sum solution into O(N) using a Hash Map.",
+    "difficulty": "beginner",
+    "duration_minutes": 15,
+    "skills": ["python", "cpp", "java", "javascript", "go"],
+    "challenge_type": "coding_dsa"
   },
   {
     "id": "CH002",
-    "title": "SQL: Top 3 Earners Per Department",
-    "difficulty": "medium",
-    "skills": ["sql"],
-    "description": "Write a SQL query to find the **top 3 highest-paid employees** in each department.\n\nThe database has:\n- `Department(id INT, name TEXT)`\n- `Employee(id INT, name TEXT, salary INT, dept_id INT)`\n\nOutput columns: `department | employee | salary` sorted by department, then salary descending.\n\nSimulate using Python's built-in `sqlite3` module.",
-    "examples": [
-      {
-        "input": "Engineering: Alice(80k), Bob(70k), Carol(90k), Dave(60k)\nSales: Eve(55k)",
-        "output": "Engineering|Carol|90000\nEngineering|Alice|80000\nEngineering|Bob|70000\nSales|Eve|55000",
-        "explanation": "Top 3 from Engineering + all from Sales (only 1 employee)"
-      }
-    ],
-    "constraints": [
-      "Use RANK() or ROW_NUMBER() window function",
-      "Output pipe-separated: dept|employee|salary",
-      "Sort by dept name ASC, salary DESC"
-    ],
-    "starterCode": {
-      "python": "import sqlite3\n\ncon = sqlite3.connect(':memory:')\ncur = con.cursor()\ncur.executescript('''\nCREATE TABLE Department(id INT, name TEXT);\nCREATE TABLE Employee(id INT, name TEXT, salary INT, dept_id INT);\nINSERT INTO Department VALUES(1,'Engineering'),(2,'Sales');\nINSERT INTO Employee VALUES\n  (1,'Alice',80000,1),(2,'Bob',70000,1),\n  (3,'Carol',90000,1),(4,'Dave',60000,1),\n  (5,'Eve',55000,2);\n''')\n\n# Write your SQL query here\nquery = '''\nSELECT d.name, e.name, e.salary\nFROM Employee e\nJOIN Department d ON e.dept_id = d.id\n-- Add your RANK/ROW_NUMBER logic here\nORDER BY d.name, e.salary DESC\n'''\n\nfor row in cur.execute(query):\n    print('|'.join(str(x) for x in row))",
-      "javascript": "// Use Python tab for SQL challenges",
-      "java": "// Use Python tab for SQL challenges"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "Engineering|Carol|90000\nEngineering|Alice|80000\nEngineering|Bob|70000\nSales|Eve|55000" }
-    ],
-    "tags": ["sql", "window-functions", "ranking"]
+    "title": "SQL Revenue Window Analysis",
+    "description": "Write a PostgreSQL query using window functions to calculate a 7-day rolling average of daily revenue.",
+    "difficulty": "intermediate",
+    "duration_minutes": 20,
+    "skills": ["sql", "postgres", "mysql"],
+    "challenge_type": "query_writing"
   },
   {
     "id": "CH003",
-    "title": "KNN Classifier from Scratch",
-    "difficulty": "medium",
-    "skills": ["machine_learning", "python"],
-    "description": "Implement a **K-Nearest Neighbors classifier** without using any ML libraries.\n\nGiven a list of labeled training points `(x, y, label)` and a query point `(qx, qy)`, return the predicted label using **Euclidean distance** with k=3.\n\nBreak ties alphabetically.",
-    "examples": [
-      {
-        "input": "training = [(1,2,'A'),(2,3,'A'),(5,5,'B'),(6,4,'B'),(1.5,1.5,'A')]\nquery = (2, 2), k = 3",
-        "output": "A",
-        "explanation": "3 nearest points to (2,2) are all class A"
-      }
-    ],
-    "constraints": [
-      "k ≥ 1",
-      "No sklearn or external ML libraries",
-      "Tie-break: choose label that comes first alphabetically"
-    ],
-    "starterCode": {
-      "python": "import math\nfrom collections import Counter\n\ndef knn(training, query, k):\n    \"\"\"\n    training: list of (x, y, label)\n    query: (x, y)\n    k: int\n    returns: predicted label (str)\n    \"\"\"\n    # Step 1: compute distances\n    # Step 2: find k nearest\n    # Step 3: majority vote\n    pass\n\ntraining = [(1,2,'A'),(2,3,'A'),(5,5,'B'),(6,4,'B'),(1.5,1.5,'A')]\nquery = (2, 2)\nprint(knn(training, query, k=3))  # Expected: A",
-      "javascript": "function knn(training, query, k) {\n  // training: [{x, y, label}], query: {x, y}\n  // return predicted label\n}\n\nconst training = [{x:1,y:2,label:'A'},{x:2,y:3,label:'A'},{x:5,y:5,label:'B'},{x:6,y:4,label:'B'},{x:1.5,y:1.5,label:'A'}];\nconsole.log(knn(training, {x:2, y:2}, 3)); // A",
-      "java": "// Use Python tab for this problem"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "A" }
-    ],
-    "tags": ["machine-learning", "distance", "classification"]
+    "title": "Build a Simple REST API",
+    "description": "Given a boilerplate, implement a GET endpoint that returns a paginated list of users.",
+    "difficulty": "intermediate",
+    "duration_minutes": 25,
+    "skills": ["fastapi", "express", "django", "nodejs"],
+    "challenge_type": "coding_framework"
   },
   {
     "id": "CH004",
-    "title": "Docker Layer Counter",
-    "difficulty": "easy",
-    "skills": ["python"],
-    "description": "Given a list of Dockerfile instructions (one per line), count the number of **image layers** created.\n\nOnly `RUN`, `COPY`, and `ADD` instructions create new layers. Other commands (`FROM`, `ENV`, `EXPOSE`, `LABEL`, `WORKDIR`, `CMD`, etc.) do **not**.",
-    "examples": [
-      {
-        "input": "FROM ubuntu:20.04\nRUN apt-get update\nRUN apt-get install python3\nCOPY . /app\nENV PORT=8000\nADD config.json /app/",
-        "output": "4",
-        "explanation": "RUN + RUN + COPY + ADD = 4 layers"
-      }
-    ],
-    "constraints": [
-      "FROM does not create a layer in this problem",
-      "1 ≤ lines ≤ 100",
-      "Instructions are uppercase"
-    ],
-    "starterCode": {
-      "python": "def count_layers(lines):\n    layer_cmds = {'RUN', 'COPY', 'ADD'}\n    # Your code here\n    pass\n\ndockerfile = '''FROM ubuntu:20.04\nRUN apt-get update\nRUN apt-get install python3\nCOPY . /app\nENV PORT=8000\nADD config.json /app/'''.strip().split('\\n')\n\nprint(count_layers(dockerfile))  # Expected: 4",
-      "javascript": "function countLayers(lines) {\n  const layerCmds = new Set(['RUN', 'COPY', 'ADD']);\n  // Your code here\n}\n\nconst lines = 'FROM ubuntu:20.04\\nRUN apt-get update\\nCOPY . /app\\nADD config.json /app/'.split('\\n');\nconsole.log(countLayers(lines)); // 3",
-      "java": "public class Main {\n  public static int countLayers(String[] lines) {\n    // Your code here\n    return 0;\n  }\n  public static void main(String[] args) {\n    String[] lines = {\"FROM ubuntu\",\"RUN apt\",\"COPY . /app\",\"ENV X=1\"};\n    System.out.println(countLayers(lines)); // 2\n  }\n}"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "4" }
-    ],
-    "tags": ["docker", "parsing", "strings"]
+    "title": "React State Debugging",
+    "description": "Fix a React component where a generic `useState` hook lacks proper TypeScript typing, leading to a build error.",
+    "difficulty": "intermediate",
+    "duration_minutes": 15,
+    "skills": ["react", "typescript", "frontend"],
+    "challenge_type": "coding_framework"
   },
   {
     "id": "CH005",
-    "title": "AWS Cost Estimator",
-    "difficulty": "hard",
-    "skills": ["python", "aws"],
-    "description": "Given JSON usage data, compute the **total monthly AWS cost** rounded to 2 decimal places.\n\nPricing:\n- EC2 `t2.micro`: $0.0116/hr, `t2.small`: $0.023/hr\n- S3: $0.023/GB-month\n- Lambda: first 1,000,000 invocations **free**, then $0.20 per million\n\nInput is a JSON string with keys `ec2`, `s3_gb`, `lambda_invocations`.",
-    "examples": [
-      {
-        "input": "{\"ec2\":[{\"type\":\"t2.micro\",\"hours\":720},{\"type\":\"t2.small\",\"hours\":100}],\"s3_gb\":50,\"lambda_invocations\":2000000}",
-        "output": "22.07",
-        "explanation": "EC2: 720×0.0116 + 100×0.023 = 8.352 + 2.3 = 10.65. S3: 50×0.023 = 1.15. Lambda: (2M-1M)×0.20/1M = 0.20. Wait — recheck: Lambda billable = 1M, cost = 1×0.20 = 0.20. Subtotal: 10.65+1.15+0.20 = 12.00. Note: recalculate with your implementation."
-      }
-    ],
-    "constraints": [
-      "EC2 types: t2.micro and t2.small only",
-      "Lambda: first million free",
-      "Round to 2 decimal places using round(x, 2)"
-    ],
-    "starterCode": {
-      "python": "import json\n\nEC2_PRICES = {'t2.micro': 0.0116, 't2.small': 0.023}\nS3_PRICE = 0.023          # per GB-month\nLAMBDA_FREE = 1_000_000\nLAMBDA_RATE = 0.20        # per million invocations\n\ndef estimate_cost(data):\n    total = 0.0\n    # EC2 cost\n    for instance in data.get('ec2', []):\n        total += EC2_PRICES.get(instance['type'], 0) * instance['hours']\n    # S3 cost\n    total += data.get('s3_gb', 0) * S3_PRICE\n    # Lambda cost\n    invocations = data.get('lambda_invocations', 0)\n    billable = max(0, invocations - LAMBDA_FREE)\n    total += (billable / 1_000_000) * LAMBDA_RATE\n    return round(total, 2)\n\nraw = '{\"ec2\":[{\"type\":\"t2.micro\",\"hours\":720},{\"type\":\"t2.small\",\"hours\":100}],\"s3_gb\":50,\"lambda_invocations\":2000000}'\nprint(estimate_cost(json.loads(raw)))",
-      "javascript": "// Use Python tab",
-      "java": "// Use Python tab"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "12.0" }
-    ],
-    "tags": ["aws", "math", "json"]
+    "title": "Dockerize a Node App",
+    "description": "A given Dockerfile fails to expose port 8080. Identify and fix the Dockerfile so the container can start properly.",
+    "difficulty": "beginner",
+    "duration_minutes": 10,
+    "skills": ["docker", "linux"],
+    "challenge_type": "practical_config"
   },
   {
     "id": "CH006",
-    "title": "Git Branch Diff Counter",
-    "difficulty": "easy",
-    "skills": ["python", "git"],
-    "description": "Given a list of commits as `(branch, file_changed)` pairs, count how many **unique files** were changed on a specific branch.\n\nThis simulates `git diff main..feature --name-only | wc -l`.",
-    "examples": [
-      {
-        "input": "commits = [('feature','auth.py'),('feature','models.py'),('main','README.md'),('feature','auth.py')]\nbranch = 'feature'",
-        "output": "2",
-        "explanation": "auth.py and models.py are unique files changed on 'feature'"
-      }
-    ],
-    "constraints": [
-      "Branch names are strings",
-      "File names are unique identifiers",
-      "Count distinct files only"
-    ],
-    "starterCode": {
-      "python": "def count_branch_files(commits, branch):\n    \"\"\"\n    commits: list of (branch_name, filename)\n    branch: target branch\n    returns: int — count of unique files changed on that branch\n    \"\"\"\n    # Your code here\n    pass\n\ncommits = [\n    ('feature', 'auth.py'),\n    ('feature', 'models.py'),\n    ('main', 'README.md'),\n    ('feature', 'auth.py'),\n]\nprint(count_branch_files(commits, 'feature'))  # Expected: 2",
-      "javascript": "function countBranchFiles(commits, branch) {\n  // commits: [{branch, file}]\n  // return count of unique files on branch\n}\n\nconst commits = [{branch:'feature',file:'auth.py'},{branch:'feature',file:'models.py'},{branch:'main',file:'README.md'},{branch:'feature',file:'auth.py'}];\nconsole.log(countBranchFiles(commits, 'feature')); // 2",
-      "java": "import java.util.*;\npublic class Main {\n  public static int countBranchFiles(String[][] commits, String branch) {\n    Set<String> files = new HashSet<>();\n    for (String[] c : commits)\n      if (c[0].equals(branch)) files.add(c[1]);\n    return files.size();\n  }\n  public static void main(String[] args) {\n    String[][] commits = {{\"feature\",\"auth.py\"},{\"feature\",\"models.py\"},{\"main\",\"README.md\"},{\"feature\",\"auth.py\"}};\n    System.out.println(countBranchFiles(commits, \"feature\")); // 2\n  }\n}"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "2" }
-    ],
-    "tags": ["git", "sets", "strings"]
+    "title": "Kubernetes Ingress YAML Fix",
+    "description": "The provided K8s Ingress YAML routes to the wrong backend service. Fix the `backend.service.name` to restore routing.",
+    "difficulty": "advanced",
+    "duration_minutes": 20,
+    "skills": ["kubernetes", "devops_cloud"],
+    "challenge_type": "practical_config"
   },
   {
     "id": "CH007",
-    "title": "Word Count (Spark-Style)",
-    "difficulty": "medium",
-    "skills": ["python", "spark"],
-    "description": "Implement a **MapReduce word count** pipeline — the classic Spark first example — using Python generators.\n\nGiven a list of text lines, implement:\n1. `mapper(line)` → yields `(word, 1)` for each word\n2. `reducer(word, counts)` → returns total count\n3. Print top 3 words by count, sorted by count desc then alphabetically.",
-    "examples": [
-      {
-        "input": "lines = ['hello world', 'hello python', 'world of python python']",
-        "output": "python 3\nhello 2\nworld 2",
-        "explanation": "python:3, hello:2, world:2 — top 3, sorted by count desc then alpha"
-      }
-    ],
-    "constraints": [
-      "Words are lowercase, split on spaces",
-      "Top 3 only; tie-break alphabetically",
-      "No Counter/collections imports needed (but allowed)"
-    ],
-    "starterCode": {
-      "python": "def mapper(line):\n    \"\"\"Yields (word, 1) for each word in the line.\"\"\"\n    for word in line.lower().split():\n        yield (word, 1)\n\ndef reducer(pairs):\n    \"\"\"Takes iterable of (word, 1) pairs, returns {word: count} dict.\"\"\"\n    counts = {}\n    for word, val in pairs:\n        counts[word] = counts.get(word, 0) + val\n    return counts\n\ndef word_count(lines, top_n=3):\n    # Map phase\n    mapped = (pair for line in lines for pair in mapper(line))\n    # Reduce phase\n    counts = reducer(mapped)\n    # Sort: count desc, then alphabetically\n    sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0]))\n    for word, count in sorted_counts[:top_n]:\n        print(f'{word} {count}')\n\nlines = ['hello world', 'hello python', 'world of python python']\nword_count(lines)",
-      "javascript": "function wordCount(lines, topN=3) {\n  const counts = {};\n  for (const line of lines)\n    for (const word of line.toLowerCase().split(' '))\n      counts[word] = (counts[word] || 0) + 1;\n  Object.entries(counts)\n    .sort(([a,ca],[b,cb]) => cb-ca || a.localeCompare(b))\n    .slice(0, topN)\n    .forEach(([w,c]) => console.log(`${w} ${c}`));\n}\nwordCount(['hello world', 'hello python', 'world of python python']);",
-      "java": "// Use Python tab for this challenge"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "python 3\nhello 2\nworld 2" }
-    ],
-    "tags": ["spark", "mapreduce", "generators"]
+    "title": "Pandas Data Cleaning",
+    "description": "Given a CSV, write a Pandas script to drop rows with NaN in the 'Price' column and normalize the 'Name' column to lowercase.",
+    "difficulty": "beginner",
+    "duration_minutes": 15,
+    "skills": ["pandas", "python", "data_analytics"],
+    "challenge_type": "coding_framework"
   },
   {
     "id": "CH008",
-    "title": "API Route Validator",
-    "difficulty": "easy",
-    "skills": ["python", "fastapi"],
-    "description": "Given a list of HTTP route definitions as `(method, path)` tuples and a list of incoming requests `(method, path)`, determine which requests are **valid** (match a defined route).\n\nPaths may contain **dynamic segments** like `/users/{id}`. Match them with any value.\n\nPrint `VALID` or `INVALID` for each request.",
-    "examples": [
-      {
-        "input": "routes = [('GET','/users'),('GET','/users/{id}'),('POST','/users')]\nrequests = [('GET','/users'),('GET','/users/42'),('DELETE','/users')]",
-        "output": "VALID\nVALID\nINVALID",
-        "explanation": "DELETE /users has no matching route"
-      }
+    "title": "Scikit-Learn Classification",
+    "description": "Train a Random Forest classifier on the Iris dataset and return predictions. Fill in the missing `.fit()` and `.predict()` calls.",
+    "difficulty": "intermediate",
+    "duration_minutes": 20,
+    "skills": ["scikit_learn", "machine_learning", "ai_ml"],
+    "challenge_type": "coding_framework"
+  },
+  {
+    "id": "CH009",
+    "title": "OWASP Top 10 Identification",
+    "description": "Identify the primary vulnerability in a snippet of raw SQL concatenated with user input.",
+    "difficulty": "beginner",
+    "duration_minutes": 5,
+    "skills": ["owasp_top_10", "web_security", "secure_coding"],
+    "challenge_type": "mcq_concept",
+    "options": [
+      "Cross-Site Scripting (XSS)",
+      "SQL Injection (SQLi)",
+      "Insecure Direct Object Reference (IDOR)",
+      "Cross-Site Request Forgery (CSRF)"
     ],
-    "constraints": [
-      "Dynamic segments start with { and end with }",
-      "Method must match exactly (GET, POST, etc.)",
-      "Path segments split on /"
+    "correct_index": 1,
+    "explanations": [
+      "XSS involves executing scripts in a user's browser, not database execution.",
+      "Correct. Concatenating user input directly into a SQL query string allows SQL Injection.",
+      "IDOR involves accessing objects bypassing authorization, not manipulating the query structure.",
+      "CSRF forces an end user to execute unwanted actions, unrelated to this DB query pattern."
+    ]
+  },
+  {
+    "id": "CH010",
+    "title": "Linux Permissions Parsing",
+    "description": "Translate the numeric file permission `chmod 644` into its symbolic representation for `user`, `group`, and `others`.",
+    "difficulty": "beginner",
+    "duration_minutes": 5,
+    "skills": ["linux", "os", "devops_cloud"],
+    "challenge_type": "mcq_concept",
+    "options": [
+      "-rwx--x--x",
+      "-rw-rw-r--",
+      "-rw-r--r--",
+      "-r-xr-xr-x"
     ],
-    "starterCode": {
-      "python": "import re\n\ndef match_path(pattern, path):\n    \"\"\"Returns True if path matches the route pattern.\"\"\"\n    pattern_parts = pattern.split('/')\n    path_parts = path.split('/')\n    if len(pattern_parts) != len(path_parts):\n        return False\n    for p, r in zip(pattern_parts, path_parts):\n        if p.startswith('{') and p.endswith('}'):\n            continue  # dynamic segment, always matches\n        if p != r:\n            return False\n    return True\n\ndef validate_requests(routes, requests):\n    for method, path in requests:\n        matched = any(\n            rm == method and match_path(rp, path)\n            for rm, rp in routes\n        )\n        print('VALID' if matched else 'INVALID')\n\nroutes = [('GET','/users'),('GET','/users/{id}'),('POST','/users')]\nrequests = [('GET','/users'),('GET','/users/42'),('DELETE','/users')]\nvalidate_requests(routes, requests)",
-      "javascript": "function matchPath(pattern, path) {\n  const pp = pattern.split('/'), rp = path.split('/');\n  if (pp.length !== rp.length) return false;\n  return pp.every((p, i) => (p.startsWith('{') && p.endsWith('}')) || p === rp[i]);\n}\nfunction validateRequests(routes, requests) {\n  for (const [m, p] of requests) {\n    const ok = routes.some(([rm, rp]) => rm===m && matchPath(rp, p));\n    console.log(ok ? 'VALID' : 'INVALID');\n  }\n}\nvalidateRequests([['GET','/users'],['GET','/users/{id}'],['POST','/users']],[['GET','/users'],['GET','/users/42'],['DELETE','/users']]);",
-      "java": "// Use Python tab for this challenge"
-    },
-    "testCases": [
-      { "input": "", "expectedOutput": "VALID\nVALID\nINVALID" }
+    "correct_index": 2,
+    "explanations": [
+      "That would be 711.",
+      "That would be 664.",
+      "Correct. 6 = read+write (rw) for owner, 4 = read (r) for group, 4 = read (r) for others.",
+      "That would be 555."
+    ]
+  },
+  {
+    "id": "CH011",
+    "title": "Incident Response Log Triage",
+    "description": "Review the following web server log snippet. A sudden spike in 401 Unauthorized errors from a single IP is observed. Choose the most appropriate initial containment response.",
+    "difficulty": "advanced",
+    "duration_minutes": 15,
+    "skills": ["incident_response", "log_analysis", "threat_detection", "cybersecurity_appsec"],
+    "challenge_type": "scenario_analysis",
+    "rubric": [
+      "Identifies the attack as a likely brute-force attempt.",
+      "Suggests temporarily blocking the offending IP address via WAF or firewall."
+    ]
+  },
+  {
+    "id": "CH012",
+    "title": "AWS IAM Least Privilege",
+    "description": "Which of the following JSON policies grants read-only access to a specific S3 bucket named 'company-logs'?",
+    "difficulty": "intermediate",
+    "duration_minutes": 10,
+    "skills": ["aws", "iam", "cloud_security"],
+    "challenge_type": "mcq_concept",
+    "options": [
+      "Action: s3:*, Resource: arn:aws:s3:::company-logs",
+      "Action: s3:GetObject, Resource: arn:aws:s3:::company-logs/*",
+      "Action: s3:ListBucket, Resource: *",
+      "Action: *, Resource: arn:aws:s3:::company-logs/*"
     ],
-    "tags": ["fastapi", "routing", "pattern-matching"]
+    "correct_index": 1,
+    "explanations": [
+      "This grants full control over the bucket.",
+      "Correct. Explicitly limiting to GetObject applies least privilege for reading objects.",
+      "This only allows listing buckets natively, not reading the objects.",
+      "This provides admin rights over objects in the bucket."
+    ]
   }
 ]

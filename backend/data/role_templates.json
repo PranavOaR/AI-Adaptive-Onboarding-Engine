@@ -1,17 +1,175 @@
 {
-  "backend engineer": {
-    "python": 3, "sql": 2, "docker": 2, "fastapi": 2, "git": 2
+  "backend_engineer_intern": {
+    "display_name": "Backend Engineer Intern",
+    "domain_tags": ["backend", "api", "database"],
+    "title_keywords": ["backend", "server", "api", "platform engineer"],
+    "required_skills": {
+      "python": 2,
+      "nodejs": 2,
+      "sql": 2,
+      "git": 1
+    },
+    "optional_skills": {
+      "fastapi": 1,
+      "express": 1,
+      "postgres": 1,
+      "docker": 1,
+      "api_security": 1
+    },
+    "challenge_preferences": ["coding_dsa", "coding_framework", "query_writing"],
+    "roadmap_phase_emphasis": ["Backend Frameworks", "Database Design", "API Security"]
   },
-  "data analyst": {
-    "sql": 3, "excel": 2, "power_bi": 2, "python": 1
+  "frontend_engineer_intern": {
+    "display_name": "Frontend Engineer Intern",
+    "domain_tags": ["frontend", "web", "ui"],
+    "title_keywords": ["frontend", "ui", "web developer", "react developer"],
+    "required_skills": {
+      "html_css": 2,
+      "javascript": 2,
+      "react": 1,
+      "git": 1
+    },
+    "optional_skills": {
+      "typescript": 1,
+      "vue": 1,
+      "tailwind": 1,
+      "web_security": 1
+    },
+    "challenge_preferences": ["coding_framework", "mcq_concept"],
+    "roadmap_phase_emphasis": ["State Management", "Component Design", "Web Performance"]
   },
-  "data engineer": {
-    "python": 3, "sql": 3, "spark": 2, "aws": 2, "docker": 2
+  "full_stack_intern": {
+    "display_name": "Full Stack Engineer Intern",
+    "domain_tags": ["frontend", "backend", "web"],
+    "title_keywords": ["full stack", "full-stack", "software engineer intern", "sde"],
+    "required_skills": {
+      "javascript": 2,
+      "html_css": 2,
+      "react": 1,
+      "nodejs": 1,
+      "sql": 1,
+      "git": 1
+    },
+    "optional_skills": {
+      "express": 1,
+      "typescript": 1,
+      "docker": 1,
+      "postgres": 1
+    },
+    "challenge_preferences": ["coding_framework", "coding_dsa", "query_writing"],
+    "roadmap_phase_emphasis": ["API Integration", "State Management", "Database Design"]
   },
-  "ml engineer": {
-    "python": 4, "machine_learning": 3, "docker": 2, "aws": 2, "sql": 2
+  "data_analyst_intern": {
+    "display_name": "Data Analyst Intern",
+    "domain_tags": ["data", "analytics", "dashboard"],
+    "title_keywords": ["data analyst", "bi intern", "business intelligence"],
+    "required_skills": {
+      "sql": 2,
+      "python": 2,
+      "pandas": 1
+    },
+    "optional_skills": {
+      "power_bi": 1,
+      "tableau": 1,
+      "numpy": 1
+    },
+    "challenge_preferences": ["query_writing", "mcq_concept", "coding_framework"],
+    "roadmap_phase_emphasis": ["Data Wrangling", "Data Visualization", "Advanced SQL"]
   },
-  "devops engineer": {
-    "docker": 3, "kubernetes": 3, "aws": 3, "python": 2, "git": 3
+  "ml_engineer_intern": {
+    "display_name": "Machine Learning Engineer Intern",
+    "domain_tags": ["ml", "ai", "data"],
+    "title_keywords": ["machine learning", "ml engineer", "ai intern", "data scientist"],
+    "required_skills": {
+      "python": 2,
+      "scikit_learn": 1,
+      "pandas": 1,
+      "sql": 1
+    },
+    "optional_skills": {
+      "tensorflow": 1,
+      "pytorch": 1,
+      "numpy": 1,
+      "nlp": 1,
+      "docker": 1
+    },
+    "challenge_preferences": ["coding_framework", "coding_dsa"],
+    "roadmap_phase_emphasis": ["Model Training", "Deep Learning basics", "Model Deployment"]
+  },
+  "devops_intern": {
+    "display_name": "DevOps / Cloud Engineer Intern",
+    "domain_tags": ["devops", "cloud", "infrastructure"],
+    "title_keywords": ["devops", "cloud engineer", "sre", "infrastructure"],
+    "required_skills": {
+      "linux": 2,
+      "git": 2,
+      "docker": 1,
+      "python": 1
+    },
+    "optional_skills": {
+      "kubernetes": 1,
+      "aws": 1,
+      "ci_cd": 1,
+      "terraform": 1,
+      "networking": 1
+    },
+    "challenge_preferences": ["practical_config", "mcq_concept"],
+    "roadmap_phase_emphasis": ["Containerization", "CI/CD Pipelines", "Cloud Provisioning"]
+  },
+  "cybersecurity_intern": {
+    "display_name": "Cybersecurity Intern",
+    "domain_tags": ["security", "infrastructure"],
+    "title_keywords": ["cybersecurity", "security intern", "information security"],
+    "required_skills": {
+      "networking": 2,
+      "linux": 2,
+      "python": 1,
+      "tcp_ip": 1
+    },
+    "optional_skills": {
+      "owasp_top_10": 1,
+      "incident_response": 1,
+      "pentesting": 1,
+      "web_security": 1
+    },
+    "challenge_preferences": ["mcq_concept", "scenario_analysis", "practical_config"],
+    "roadmap_phase_emphasis": ["Networking Fundamentals", "OS Security", "Vulnerability Assessment"]
+  },
+  "application_security_intern": {
+    "display_name": "Application Security Intern",
+    "domain_tags": ["security", "appsec", "backend"],
+    "title_keywords": ["application security", "appsec", "product security", "software security"],
+    "required_skills": {
+      "web_security": 2,
+      "owasp_top_10": 2,
+      "python": 1,
+      "javascript": 1
+    },
+    "optional_skills": {
+      "api_security": 1,
+      "linux": 1,
+      "pentesting": 1,
+      "docker": 1
+    },
+    "challenge_preferences": ["scenario_analysis", "coding_framework"],
+    "roadmap_phase_emphasis": ["Secure Coding Practices", "Web Vulnerabilities", "API Security"]
+  },
+  "security_analyst_intern": {
+    "display_name": "SOC / Security Analyst Intern",
+    "domain_tags": ["security", "soc", "defensive"],
+    "title_keywords": ["security analyst", "soc analyst", "incident response", "defensive security"],
+    "required_skills": {
+      "networking": 2,
+      "linux": 2,
+      "incident_response": 1,
+      "tcp_ip": 1
+    },
+    "optional_skills": {
+      "python": 1,
+      "owasp_top_10": 1,
+      "api_security": 1
+    },
+    "challenge_preferences": ["scenario_analysis", "mcq_concept"],
+    "roadmap_phase_emphasis": ["Log Analysis", "Incident Triage", "Network Forensics"]
   }
 }
