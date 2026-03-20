@@ -25,13 +25,15 @@ export default function GapMatrix({ gaps }) {
         </div>
 
         <div className="space-y-3">
-          {gaps.map((g) => {
+          {gaps.filter(g => g.status !== 'irrelevant').map((g) => {
             const statusClass =
               g.status === 'matched'
                 ? 'badge-matched'
                 : g.status === 'partial'
                   ? 'badge-partial'
-                  : 'badge-missing'
+                  : g.status === 'missing'
+                    ? 'badge-missing'
+                    : 'badge bg-mc-border text-mc-text2' // irrelevant
 
             return (
               <div key={g.skill} className="card-glow p-5 reveal-item">
@@ -41,9 +43,14 @@ export default function GapMatrix({ gaps }) {
                       {g.skill.replace(/_/g, ' ')}
                     </span>
                     <span className={`badge ${statusClass}`}>{g.status}</span>
+                    {g.requirement_type && g.requirement_type !== 'none' && (
+                       <span className={`font-mono text-[9px] px-2 py-0.5 border rounded ${g.requirement_type === 'required' ? 'text-mc-amber border-mc-amber/50' : 'text-mc-cyan border-mc-cyan/50'}`}>
+                          {g.requirement_type.toUpperCase()}
+                       </span>
+                    )}
                   </div>
                   <span className="font-mono text-[10px] text-mc-text2">
-                    PRI {g.priority_score.toFixed(2)}
+                    PRI {Math.round(g.priority_score * 100) / 100}
                   </span>
                 </div>
 
@@ -82,12 +89,17 @@ export default function GapMatrix({ gaps }) {
                 </div>
 
                 {g.gap > 0 && (
-                  <div className="mt-3 flex items-center gap-2">
-                    <div className="flex-1 h-px bg-mc-red/30" />
-                    <span className="font-mono text-[10px] text-mc-red">
-                      GAP: {g.gap} LEVEL{g.gap > 1 ? 'S' : ''}
-                    </span>
-                    <div className="flex-1 h-px bg-mc-red/30" />
+                  <div className="mt-4 pt-3 border-t border-mc-border">
+                    <div className="flex flex-col gap-2">
+                      <p className="font-mono text-[10px] text-mc-text2 leading-relaxed">
+                        <span className="text-mc-cyan">REQUIRED:</span> {g.why_required}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <p className="font-mono text-[10px] text-mc-text2 leading-relaxed">
+                           <span className="text-mc-amber">CANDIDATE ({Math.round((g.candidate_confidence || 0) * 100)}% conf):</span> {g.why_candidate_level}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

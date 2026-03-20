@@ -113,9 +113,24 @@ export default function SummaryBanner({ summary }) {
 
               <div className="flex flex-wrap items-center gap-3">
                 {summary.detected_role && (
-                  <span className="font-mono text-[10px] tracking-wider px-3 py-1 border border-mc-cyan text-mc-cyan rounded">
-                    {summary.detected_role.toUpperCase()}
-                  </span>
+                  <div className="flex items-center gap-2 border border-mc-cyan px-3 py-1 bg-mc-cyan/5 rounded">
+                    <span className="font-mono text-[10px] tracking-wider text-mc-cyan">
+                      {summary.role_display_name?.toUpperCase() || summary.detected_role.toUpperCase()}
+                    </span>
+                    <span className="font-mono text-[10px] text-mc-cyan border-l border-mc-cyan/30 pl-2">
+                       CONF: {Math.round(summary.role_confidence * 100)}%
+                    </span>
+                  </div>
+                )}
+                {summary.role_candidates?.length > 1 && (
+                  <div className="flex items-center gap-2 ml-2">
+                    <span className="font-mono text-[8px] text-mc-text2 uppercase tracking-widest mr-1">Other Matches:</span>
+                    {summary.role_candidates.slice(1, 3).map(c => (
+                      <span key={c.role_id} className="font-mono text-[8px] text-mc-text2/70 border border-mc-border px-1.5 py-0.5 rounded">
+                        {c.display_name} ({Math.round(c.confidence * 100)}%)
+                      </span>
+                    ))}
+                  </div>
                 )}
                 {summary.top_gaps?.map((gap) => (
                   <span

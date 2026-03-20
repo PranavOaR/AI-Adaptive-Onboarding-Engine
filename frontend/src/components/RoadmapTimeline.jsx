@@ -5,8 +5,9 @@ import challenges from '../data/challenges.json'
 
 const PHASE_COLORS = {
   Foundation: { border: 'border-mc-green', text: 'text-mc-green', bg: 'bg-mc-green', dot: 'bg-mc-green' },
-  Intermediate: { border: 'border-mc-amber', text: 'text-mc-amber', bg: 'bg-mc-amber', dot: 'bg-mc-amber' },
-  'Role-Specific': { border: 'border-mc-cyan', text: 'text-mc-cyan', bg: 'bg-mc-cyan', dot: 'bg-mc-cyan' },
+  'Core Role Skills': { border: 'border-mc-amber', text: 'text-mc-amber', bg: 'bg-mc-amber', dot: 'bg-mc-amber' },
+  'Applied Practice': { border: 'border-mc-cyan', text: 'text-mc-cyan', bg: 'bg-mc-cyan', dot: 'bg-mc-cyan' },
+  'Optional Stretch': { border: 'border-mc-text2', text: 'text-mc-text2', bg: 'bg-mc-text2', dot: 'bg-mc-text2' },
 }
 
 const DIFFICULTY_BADGE = {
@@ -53,7 +54,7 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
     phases[course.phase].push(course)
   })
 
-  const phaseOrder = ['Foundation', 'Intermediate', 'Role-Specific']
+  const phaseOrder = ['Foundation', 'Core Role Skills', 'Applied Practice', 'Optional Stretch']
 
   return (
     <>
@@ -74,7 +75,7 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {phaseOrder.map((phaseName) => {
               const courses = phases[phaseName]
               if (!courses) return null
@@ -141,6 +142,12 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
                             {course.prerequisites_needed?.length > 0 && (
                               <div className="mb-2 font-mono text-[9px] text-mc-text2/50">
                                 REQUIRES: {course.prerequisites_needed.join(', ')}
+                              </div>
+                            )}
+
+                            {course.justification && (
+                              <div className="mb-4 text-xs text-mc-text2/80 font-body leading-relaxed border-l border-mc-border pl-2">
+                                {course.justification}
                               </div>
                             )}
 

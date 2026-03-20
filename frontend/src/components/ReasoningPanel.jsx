@@ -20,12 +20,13 @@ function TraceItem({ trace }) {
 
       {open && (
         <div className="px-4 pb-4 space-y-4 border-t border-mc-border">
-          <div className="pt-4">
+          <div>
             <div className="font-mono text-[10px] text-mc-cyan tracking-wider mb-1">
-              JD EVIDENCE
+              WHY REQUIRED (JD EVIDENCE)
             </div>
+            {trace.why_required && <p className="text-xs text-mc-text2 font-body mb-2">{trace.why_required}</p>}
             {trace.jd_evidence.map((e, i) => (
-              <p key={i} className="text-xs text-mc-text2 font-body pl-3 border-l border-mc-cyan/30 mb-1">
+              <p key={i} className="text-xs text-mc-text2/70 font-body pl-3 border-l border-mc-cyan/30 mb-1 italic">
                 &ldquo;{e}&rdquo;
               </p>
             ))}
@@ -33,16 +34,17 @@ function TraceItem({ trace }) {
 
           <div>
             <div className="font-mono text-[10px] text-mc-green tracking-wider mb-1">
-              RESUME EVIDENCE
+              CANDIDATE LEVEL (RESUME EVIDENCE)
             </div>
+            {trace.why_candidate_level && <p className="text-xs text-mc-text2 font-body mb-2">{trace.why_candidate_level}</p>}
             {trace.resume_evidence.length > 0 ? (
               trace.resume_evidence.map((e, i) => (
-                <p key={i} className="text-xs text-mc-text2 font-body pl-3 border-l border-mc-green/30 mb-1">
+                <p key={i} className="text-xs text-mc-text2/70 font-body pl-3 border-l border-mc-green/30 mb-1 italic">
                   &ldquo;{e}&rdquo;
                 </p>
               ))
             ) : (
-              <p className="text-xs text-mc-red/70 font-mono pl-3 border-l border-mc-red/30">
+              <p className="text-xs text-mc-red/70 font-mono pl-3 border-l border-mc-red/30 italic">
                 Not found in resume
               </p>
             )}
@@ -50,17 +52,25 @@ function TraceItem({ trace }) {
 
           <div>
             <div className="font-mono text-[10px] text-mc-amber tracking-wider mb-1">
-              WHY THIS COURSE
+              GAP SEVERITY & COURSE ASSIGNMENT
             </div>
-            <p className="text-xs text-mc-text2 font-body">{trace.course_selection_reason}</p>
+            {trace.why_severity && <p className="text-xs text-mc-text2 font-body mb-1">{trace.why_severity}</p>}
+            <p className="text-xs text-mc-text2/70 font-body border-l border-mc-amber/30 pl-3">
+              {trace.course_selection_reason}<br/>
+              {trace.ordering_reason}
+            </p>
           </div>
 
-          <div>
-            <div className="font-mono text-[10px] text-mc-text2 tracking-wider mb-1">
-              ORDERING
+          {trace.assessment_reason && (
+             <div>
+              <div className="font-mono text-[10px] text-mc-text2 tracking-wider mb-1">
+                ASSESSMENT ROUTING
+              </div>
+              <p className="text-xs text-mc-text2/70 font-body pl-3 border-l border-mc-border">
+                {trace.assessment_reason}
+              </p>
             </div>
-            <p className="text-xs text-mc-text2/70 font-body">{trace.ordering_reason}</p>
-          </div>
+          )}
         </div>
       )}
     </div>
