@@ -1,0 +1,3 @@
+Jane Doe
+Experience:
+Trained models in Scikit-Learn. Know Python well.

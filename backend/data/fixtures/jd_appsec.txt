@@ -1,0 +1,2 @@
+Job Title: Appsec Intern
+Required Skills: OWASP Top 10, API Security, Web Security.

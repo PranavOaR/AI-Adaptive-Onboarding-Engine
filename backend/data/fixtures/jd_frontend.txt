@@ -1,0 +1,2 @@
+Job Title: Frontend Intern
+Required Skills: React, JavaScript, HTML, CSS.

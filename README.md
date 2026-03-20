@@ -27,7 +27,7 @@ Three servers, three ports. No external database — SQLite auto-creates on firs
 - **Skill extraction** — regex + alias mapping against a 50+ skill taxonomy
 - **Proficiency estimation** — 4-level scale (1 = beginner → 4 = expert) based on keyword depth and context signals
 - **Gap analysis** — compares candidate vs required profile with priority scoring (JD importance × gap magnitude)
-- **Role detection** — auto-detects role from JD text and loads matching skill templates
+- **Role detection** — auto-detects role from JD against 9 supported intern profiles via cluster scoring
 
 ### 2. Personalized Learning Roadmap
 - Topologically-sorted course recommendations across Foundation → Intermediate → Role-Specific phases
@@ -39,7 +39,7 @@ Three servers, three ports. No external database — SQLite auto-creates on firs
 - In-browser coding environment powered by **Monaco Editor** (VS Code's editor)
 - Terminal output via **Xterm.js** with Mission Control color theme
 - Code execution through **Judge0 CE** (free public API) — supports Python, JavaScript, Java
-- 8 curated challenges mapped to gap skills (Two Sum, SQL Queries, KNN, Docker, AWS, Git, Spark, FastAPI)
+- **12 curated challenges** mapped to 8 skill domains (Coding DSA, Framework Debugging, Configs, Scenario Analysis, MCQ)
 - Automatic verdict: ACCEPTED / WRONG ANSWER / ERROR with expected vs actual comparison
 
 ### 4. Authentication
