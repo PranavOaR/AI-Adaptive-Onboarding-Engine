@@ -4,6 +4,9 @@ import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 import challenges from '../data/challenges.json'
+import MCQChallenge from './MCQChallenge'
+import ScenarioChallenge from './ScenarioChallenge'
+import ConfigChallenge from './ConfigChallenge'
 
 const JUDGE0_LANGUAGE_IDS = { python: 71, javascript: 63, java: 62 }
 const DIFFICULTY_COLORS = {
@@ -152,6 +155,18 @@ export default function ChallengeArena({ challengeId, onClose }) {
   }
 
   if (!problem) return null
+
+  if (problem.challenge_type === 'mcq_concept') {
+    return <MCQChallenge challenge={problem} onClose={onClose} />
+  }
+
+  if (problem.challenge_type === 'scenario_analysis') {
+    return <ScenarioChallenge challenge={problem} onClose={onClose} />
+  }
+
+  if (problem.challenge_type === 'practical_config') {
+    return <ConfigChallenge challenge={problem} onClose={onClose} />
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-mc-bg flex flex-col">
