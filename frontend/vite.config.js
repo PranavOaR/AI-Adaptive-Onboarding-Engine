@@ -12,6 +12,7 @@ export default defineConfig({
       '/analyze': 'http://localhost:8000',
       '/export': 'http://localhost:8000',
       '/interview-prep': 'http://localhost:8000',
+      '/challenge': 'http://localhost:8000',
       '/chat': 'http://localhost:8000',
       '/auth': 'http://localhost:3001',
       '/judge0': {

@@ -1,24 +1,16 @@
 import { useRef, useEffect, useState, lazy, Suspense } from 'react'
-import { useScrollReveal, animateCount } from '../hooks/useScrollAnimation'
 import { useProgress } from '../hooks/useProgress'
 import challenges from '../data/challenges.json'
 
 const ChallengeArena = lazy(() => import('./ChallengeArena'))
 
-const PHASE_COLORS = {
-  Foundation: { text: 'text-success', bg: 'bg-success', border: 'border-success' },
-  'Core Role Skills': { text: 'text-warning', bg: 'bg-warning', border: 'border-warning' },
-  'Applied Practice': { text: 'text-accent', bg: 'bg-accent', border: 'border-accent' },
-  'Optional Stretch': { text: 'text-text-dim', bg: 'bg-text-dim', border: 'border-text-dim' },
+const PHASE_CONFIG = {
+  Foundation: { dotColor: 'bg-primary', textColor: 'text-primary', active: true },
+  'Core Role Skills': { dotColor: 'bg-secondary', textColor: 'text-secondary', active: false },
+  'Applied Practice': { dotColor: 'bg-tertiary', textColor: 'text-tertiary', active: false },
+  'Optional Stretch': { dotColor: 'bg-outline', textColor: 'text-outline', active: false },
 }
 
-const DIFFICULTY_PILL = {
-  beginner: 'pill-success',
-  intermediate: 'pill-warning',
-  advanced: 'pill-error',
-}
-
-// Build skill -> challenge ID lookup
 const skillToChallengeId = {}
 challenges.forEach((ch) => {
   ch.skills.forEach((skill) => {
@@ -26,31 +18,39 @@ challenges.forEach((ch) => {
   })
 })
 
+function ProgressRing({ pct }) {
+  const r = 20
+  const circ = 2 * Math.PI * r
+  const offset = circ - (pct / 100) * circ
+  return (
+    <div className="relative w-12 h-12 shrink-0">
+      <svg className="w-full h-full -rotate-90" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r={r} fill="none" stroke="currentColor" strokeWidth="4" className="text-surface-container-highest" />
+        <circle
+          cx="24" cy="24" r={r} fill="none"
+          stroke="currentColor" strokeWidth="4"
+          strokeDasharray={circ} strokeDashoffset={offset}
+          strokeLinecap="round"
+          className={pct > 0 ? 'text-primary' : 'text-surface-container-highest'}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-[9px] font-bold text-on-surface-variant">{Math.round(pct)}%</span>
+      </div>
+    </div>
+  )
+}
+
 export default function RoadmapTimeline({ roadmap, gaps, userId, role }) {
-  const sectionRef = useRef()
-  const hoursRef = useRef()
   const [activeChallengeId, setActiveChallengeId] = useState(null)
   const { markComplete, isComplete, getCompletionRate } = useProgress(role || '', userId || '')
 
-  useScrollReveal(sectionRef)
-
-  const totalHours = roadmap?.reduce((sum, c) => sum + c.duration_hours, 0) || 0
-
-  useEffect(() => {
-    if (totalHours > 0) {
-      const timer = setTimeout(() => animateCount(hoursRef.current, totalHours, 'h'), 400)
-      return () => clearTimeout(timer)
-    }
-  }, [totalHours])
-
   if (!roadmap?.length) return null
 
-  // Set of skills that are missing or partial
   const gapSkills = new Set(
     (gaps || []).filter((g) => g.status === 'missing' || g.status === 'partial').map((g) => g.skill)
   )
 
-  // Group by phase
   const phases = {}
   roadmap.forEach((course) => {
     if (!phases[course.phase]) phases[course.phase] = []
@@ -58,144 +58,104 @@ export default function RoadmapTimeline({ roadmap, gaps, userId, role }) {
   })
 
   const phaseOrder = ['Foundation', 'Core Role Skills', 'Applied Practice', 'Optional Stretch']
+  const completionRate = getCompletionRate(roadmap)
 
   return (
     <>
-      <section ref={sectionRef} className="py-14 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-xl font-semibold text-text-primary mb-1">Learning Roadmap</h2>
-              <p className="text-sm text-text-muted">Personalized learning path based on your gaps</p>
-            </div>
-            <div className="flex items-center gap-3">
-              {getCompletionRate(roadmap) > 0 && (
-                <span className="pill pill-success text-xs">{Math.round(getCompletionRate(roadmap))}% complete</span>
-              )}
-              <div className="card-static px-4 py-2.5 flex items-center gap-2">
-                <span className="text-xs text-text-muted">Total</span>
-                <span ref={hoursRef} className="text-base font-bold text-accent">0h</span>
-              </div>
-            </div>
-          </div>
+      <section className="max-w-[1200px] mx-auto px-6 pt-10 space-y-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold tracking-tight text-on-surface font-headline">Curated Learning Roadmap</h2>
+          {completionRate > 0 && (
+            <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
+              {Math.round(completionRate)}% complete
+            </span>
+          )}
+        </div>
 
-          {/* Vertical timeline layout */}
-          <div className="space-y-10">
-            {phaseOrder.map((phaseName) => {
-              const courses = phases[phaseName]
-              if (!courses) return null
-              const colors = PHASE_COLORS[phaseName]
+        {/* Vertical timeline */}
+        <div
+          className="relative pl-8 space-y-12"
+          style={{
+            '--tw-before': 'content: ""',
+          }}
+        >
+          {/* Vertical line */}
+          <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-surface-container-highest" />
 
-              return (
-                <div key={phaseName} className="reveal-item">
-                  {/* Phase header */}
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className={`w-2.5 h-2.5 rounded-full ${colors.bg}`} />
-                    <h3 className={`text-lg font-semibold ${colors.text}`}>
-                      {phaseName}
-                    </h3>
-                    <div className="flex-1 h-px bg-border" />
-                  </div>
+          {phaseOrder.map((phaseName, phaseIdx) => {
+            const courses = phases[phaseName]
+            if (!courses) return null
+            const config = PHASE_CONFIG[phaseName] || PHASE_CONFIG.Foundation
+            const isFirstPhase = phaseIdx === 0
 
-                  {/* Course cards with left border connector */}
-                  <div className={`space-y-3 ml-5 border-l ${colors.border}/30 pl-6`}>
+            return (
+              <div key={phaseName} className="relative">
+                {/* Phase dot */}
+                <div className={`absolute -left-[35px] top-1 w-6 h-6 rounded-full ${isFirstPhase ? 'bg-primary' : 'bg-surface-container-highest'} border-4 border-surface flex items-center justify-center`} />
+
+                <div className={`space-y-4 ${!isFirstPhase ? 'opacity-80' : ''}`}>
+                  <h3 className={`font-bold text-lg tracking-tight ${isFirstPhase ? config.textColor : 'text-on-surface'}`}>
+                    {phaseName}
+                  </h3>
+
+                  <div className="grid md:grid-cols-2 gap-4">
                     {courses.map((course) => {
                       const courseId = course.course_id || course.id
                       const done = isComplete(courseId)
                       const courseSkills = course.skills || course.skills_addressed || []
-                      const challengeSkill = courseSkills.find(
-                        (s) => skillToChallengeId[s] && gapSkills.has(s)
-                      )
+                      const challengeSkill = courseSkills.find(s => skillToChallengeId[s] && gapSkills.has(s))
                       const challengeId = challengeSkill ? skillToChallengeId[challengeSkill] : null
+                      const pct = done ? 100 : 0
 
                       return (
-                        <div key={courseId} className={`card p-5 relative transition-opacity duration-300 ${done ? 'opacity-60' : ''}`}>
-                          {/* Dot on the connector line */}
-                          <div
-                            className={`absolute -left-[27px] top-6 w-2.5 h-2.5 rounded-full ${done ? 'bg-success' : colors.bg} ring-2 ring-surface-0 transition-colors`}
-                          />
-
-                          <div className="flex items-start justify-between mb-2">
-                            <h4 className={`text-base font-medium leading-snug pr-2 ${done ? 'line-through text-text-muted' : 'text-text-primary'}`}>
+                        <div key={courseId} className="bg-surface-container-low p-5 rounded-xl flex items-center gap-4">
+                          <ProgressRing pct={pct} />
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-bold leading-tight ${done ? 'line-through text-on-surface-variant' : 'text-on-surface'}`}>
                               {course.title}
-                            </h4>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <span className={`pill ${DIFFICULTY_PILL[course.difficulty] || 'pill-neutral'}`}>
-                                {course.difficulty}
-                              </span>
-                              <button
-                                onClick={() => markComplete(courseId)}
-                                title={done ? 'Mark incomplete' : 'Mark complete'}
-                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                  done ? 'border-success bg-success/20' : 'border-border hover:border-success'
-                                }`}
-                              >
-                                {done && (
-                                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#34D399" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
-                                )}
-                              </button>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-3 mb-3">
-                            <span className="text-xs text-text-dim">
+                            </p>
+                            <p className="text-xs text-on-surface-variant mt-0.5">
                               {course.duration_hours}h
-                            </span>
-                            <span className="text-xs text-text-dim">
-                              {course.id || course.course_id}
-                            </span>
-                          </div>
-
-                          <div className="flex flex-wrap gap-1.5 mb-3">
-                            {courseSkills.map((s) => (
-                              <span
-                                key={s}
-                                className="text-xs px-2.5 py-1 bg-surface-1 border border-border-subtle rounded-md text-text-muted"
+                              {course.difficulty && ` · ${course.difficulty}`}
+                            </p>
+                            {challengeId && (
+                              <button
+                                onClick={() => setActiveChallengeId(challengeId)}
+                                className="text-xs text-primary font-bold hover:underline mt-1"
                               >
-                                {s.replace(/_/g, ' ')}
-                              </span>
-                            ))}
+                                Test your skills →
+                              </button>
+                            )}
                           </div>
-
-                          {course.prerequisites_needed?.length > 0 && (
-                            <p className="mb-2 text-xs text-text-dim">
-                              Requires: {course.prerequisites_needed.join(', ')}
-                            </p>
-                          )}
-
-                          {course.justification && (
-                            <p className="mb-4 text-sm text-text-muted leading-relaxed border-l-2 border-border pl-3">
-                              {course.justification}
-                            </p>
-                          )}
-
-                          {challengeId && (
-                            <button
-                              onClick={() => setActiveChallengeId(challengeId)}
-                              className="text-sm font-medium text-accent border border-accent/40 rounded-lg py-2.5 px-4
-                                hover:bg-accent/10 hover:border-accent
-                                transition-all duration-200"
-                            >
-                              Test your skills
-                            </button>
-                          )}
+                          <button
+                            onClick={() => markComplete(courseId)}
+                            title={done ? 'Mark incomplete' : 'Mark complete'}
+                            className={`shrink-0 ${done ? 'text-green-500' : 'text-surface-container-highest hover:text-on-surface-variant'} transition-colors`}
+                          >
+                            {done ? (
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            ) : (
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/></svg>
+                            )}
+                          </button>
                         </div>
                       )
                     })}
                   </div>
                 </div>
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
         </div>
       </section>
 
       {activeChallengeId && (
-        <Suspense fallback={<div className="fixed inset-0 bg-surface-0 flex items-center justify-center"><p className="text-text-muted text-sm">Loading editor…</p></div>}>
-          <ChallengeArena
-            challengeId={activeChallengeId}
-            onClose={() => setActiveChallengeId(null)}
-          />
+        <Suspense fallback={
+          <div className="fixed inset-0 bg-slate-950 flex items-center justify-center z-50">
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <ChallengeArena challengeId={activeChallengeId} onClose={() => setActiveChallengeId(null)} />
         </Suspense>
       )}
     </>

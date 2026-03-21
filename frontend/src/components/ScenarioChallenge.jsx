@@ -1,184 +1,142 @@
 import { useState } from 'react'
 
-const DIFFICULTY_PILL = {
-  easy: 'pill-success',
-  medium: 'pill-warning',
-  hard: 'pill-error',
-  beginner: 'pill-success',
-  intermediate: 'pill-warning',
-  advanced: 'pill-error',
-}
-
 export default function ScenarioChallenge({ challenge, onClose }) {
-  const [answers, setAnswers] = useState({})
+  const [response, setResponse] = useState('')
   const [submitted, setSubmitted] = useState(false)
-  const [score, setScore] = useState(null)
 
-  const questions = challenge.questions || []
-
-  const handleSelect = (qid, idx) => {
-    if (submitted) return
-    setAnswers((prev) => ({ ...prev, [qid]: idx }))
-  }
+  const rubric = challenge.rubric || []
 
   const handleSubmit = () => {
-    if (Object.keys(answers).length < questions.length) return
-    let correct = 0
-    questions.forEach((q) => {
-      if (answers[q.id] === q.correct_index) correct++
-    })
-    setScore({ correct, total: questions.length })
+    if (!response.trim()) return
     setSubmitted(true)
   }
 
   const handleReset = () => {
-    setAnswers({})
+    setResponse('')
     setSubmitted(false)
-    setScore(null)
   }
 
-  const pct = score ? Math.round((score.correct / score.total) * 100) : 0
-  const scoreColor = pct >= 75 ? 'text-success' : pct >= 50 ? 'text-warning' : 'text-error'
-
   return (
-    <div className="fixed inset-0 z-50 bg-surface-0 flex flex-col">
+    <div className="fixed inset-0 z-50 bg-background flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-surface-1 shrink-0">
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-text-primary">
-            Scenario Analysis
-          </span>
-          <span className="text-xs text-text-dim">{challenge.id}</span>
-          <span className={`pill ${DIFFICULTY_PILL[challenge.difficulty] || 'pill-neutral'}`}>
+      <header className="bg-white flex justify-between items-center w-full px-6 py-3 border-b border-slate-100 shrink-0">
+        <div className="flex items-center gap-4">
+          <span className="text-2xl font-black text-primary tracking-tighter font-headline">Skilo</span>
+          <span className="text-sm font-bold text-primary">{challenge.title}</span>
+          <span className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
+            challenge.difficulty === 'advanced' ? 'text-red-600 bg-red-50' :
+            challenge.difficulty === 'intermediate' ? 'text-amber-600 bg-amber-50' :
+            'text-green-600 bg-green-50'
+          }`}>
             {challenge.difficulty}
           </span>
-          <span className="pill pill-neutral">Scenario</span>
         </div>
         <button
           onClick={onClose}
-          className="text-sm text-text-muted hover:text-error transition-colors px-3 py-1"
+          className="p-2 hover:bg-slate-50 rounded-full transition-all text-slate-500 hover:text-red-500"
         >
-          Close
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-      </div>
+      </header>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto p-6 space-y-6">
-          {/* Title */}
-          <div>
-            <h2 className="text-xl font-semibold text-text-primary mb-2">{challenge.title}</h2>
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {(challenge.tags || []).map((tag) => (
-                <span key={tag} className="text-xs px-2 py-0.5 bg-surface-1 border border-border-subtle rounded-md text-text-dim">
-                  {tag}
+      <main className="flex-1 flex overflow-hidden p-4 gap-4">
+        {/* Left: Scenario */}
+        <section className="flex-1 bg-white rounded-2xl overflow-y-auto p-8 border border-slate-100 shadow-sm">
+          <h2 className="text-2xl font-extrabold font-headline text-on-background mb-4 tracking-tight">{challenge.title}</h2>
+
+          {challenge.skills?.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {challenge.skills.map(skill => (
+                <span key={skill} className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">
+                  {skill}
                 </span>
               ))}
             </div>
+          )}
+
+          <div className="p-5 bg-amber-50 border-l-4 border-amber-400 rounded-r-xl mb-8">
+            <p className="text-xs font-bold text-amber-700 uppercase tracking-wide mb-2">Scenario</p>
+            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{challenge.description}</p>
           </div>
 
-          {/* Scenario text */}
-          <div className="card-static p-6 border-l-2 border-warning/40">
-            <p className="text-xs font-semibold text-warning uppercase tracking-wide mb-3">Scenario</p>
-            <div className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">
-              {challenge.description}
+          {rubric.length > 0 && (
+            <div className="mb-8">
+              <h4 className="text-sm font-bold text-on-background mb-3">Evaluation Criteria</h4>
+              <ul className="space-y-2">
+                {rubric.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                    <span className="text-primary font-bold mt-0.5">{i + 1}.</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
+          )}
+        </section>
+
+        {/* Right: Response */}
+        <section className="flex-1 flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <span className="text-sm font-bold text-on-background">Your Analysis</span>
+            {submitted && (
+              <button onClick={handleReset} className="text-xs text-primary font-bold hover:underline">
+                Reset
+              </button>
+            )}
           </div>
 
-          {/* Score banner */}
-          {submitted && score && (
-            <div className={`card-static p-5 flex items-center gap-4 ${
-              pct >= 75 ? 'border-success/30' : pct >= 50 ? 'border-warning/30' : 'border-error/30'
-            }`}>
-              <span className={`text-3xl font-bold ${scoreColor}`}>
-                {score.correct}/{score.total}
-              </span>
-              <div>
-                <div className={`text-base font-medium ${scoreColor}`}>
-                  {pct >= 75 ? 'Resolved' : pct >= 50 ? 'Partial response' : 'Review needed'}
-                </div>
-                <div className="text-xs text-text-dim">{pct}% correct</div>
+          {!submitted ? (
+            <>
+              <div className="flex-1 p-6">
+                <textarea
+                  value={response}
+                  onChange={(e) => setResponse(e.target.value)}
+                  placeholder="Write your incident response analysis here. Address each evaluation criterion..."
+                  className="w-full h-full resize-none bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700 leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                />
               </div>
-              <button
-                onClick={handleReset}
-                className="ml-auto text-sm text-accent border border-accent/40 px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
-              >
-                Retry
-              </button>
-            </div>
-          )}
+              <div className="px-6 py-4 border-t border-slate-100 flex justify-end">
+                <button
+                  onClick={handleSubmit}
+                  disabled={!response.trim()}
+                  className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                    response.trim()
+                      ? 'bg-primary text-white hover:brightness-110'
+                      : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  }`}
+                >
+                  Submit Analysis
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div className="p-5 bg-green-50 border border-green-200 rounded-xl">
+                <p className="text-sm font-bold text-green-700 mb-1">Response Submitted</p>
+                <p className="text-xs text-green-600">Review your response against the evaluation criteria below.</p>
+              </div>
 
-          {/* Questions */}
-          <div className="space-y-6">
-            {questions.map((q, qi) => {
-              const selected = answers[q.id]
-              const isRealCorrect = (idx) => submitted && idx === q.correct_index
-              const isWrongSelected = (idx) => submitted && selected === idx && idx !== q.correct_index
+              <div className="p-5 bg-slate-50 rounded-xl">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Your Response</p>
+                <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{response}</p>
+              </div>
 
-              return (
-                <div key={q.id} className="card-static p-6">
-                  <div className="flex items-start gap-3 mb-4">
-                    <span className="text-xs font-medium text-warning bg-surface-1 px-2.5 py-1 rounded-md shrink-0 mt-0.5">
-                      Q{qi + 1}
-                    </span>
-                    <p className="text-sm text-text-primary leading-relaxed">{q.text}</p>
-                  </div>
-
-                  <div className="space-y-2 pl-8">
-                    {q.options.map((opt, idx) => {
-                      let style = 'border-border text-text-body hover:border-warning/50'
-                      if (!submitted && selected === idx) {
-                        style = 'border-warning text-warning bg-warning/5'
-                      } else if (isRealCorrect(idx)) {
-                        style = 'border-success text-success bg-success/5'
-                      } else if (isWrongSelected(idx)) {
-                        style = 'border-error text-error bg-error/5'
-                      }
-
-                      return (
-                        <button
-                          key={idx}
-                          onClick={() => handleSelect(q.id, idx)}
-                          className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition-all ${style} ${!submitted ? 'cursor-pointer' : 'cursor-default'}`}
-                        >
-                          <span className="text-text-dim mr-3">{String.fromCharCode(65 + idx)}.</span>
-                          {opt}
-                          {isRealCorrect(idx) && <span className="ml-2 text-success text-xs">\u2713 Correct</span>}
-                          {isWrongSelected(idx) && <span className="ml-2 text-error text-xs">\u2717</span>}
-                        </button>
-                      )
-                    })}
-                  </div>
-
-                  {submitted && q.explanation && (
-                    <div className="mt-4 ml-8 p-4 bg-surface-1 border-l-2 border-success/30 rounded-r-lg">
-                      <p className="text-xs font-semibold text-success uppercase tracking-wide mb-1">Analyst Note</p>
-                      <p className="text-sm text-text-muted leading-relaxed">{q.explanation}</p>
+              {rubric.length > 0 && (
+                <div className="space-y-3">
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Self-Check Against Rubric</p>
+                  {rubric.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3 p-4 bg-white border border-slate-200 rounded-lg">
+                      <span className="text-primary font-bold text-sm shrink-0">{i + 1}.</span>
+                      <p className="text-sm text-slate-600">{item}</p>
                     </div>
-                  )}
+                  ))}
                 </div>
-              )
-            })}
-          </div>
-
-          {/* Submit */}
-          {!submitted && (
-            <div className="flex justify-end">
-              <button
-                onClick={handleSubmit}
-                disabled={Object.keys(answers).length < questions.length}
-                className={`text-sm font-medium px-6 py-3 rounded-lg transition-colors ${
-                  Object.keys(answers).length >= questions.length
-                    ? 'bg-accent text-white hover:bg-accent-hover'
-                    : 'bg-surface-2 text-text-dim border border-border cursor-not-allowed'
-                }`}
-              >
-                Submit analysis ({Object.keys(answers).length}/{questions.length})
-              </button>
+              )}
             </div>
           )}
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   )
 }

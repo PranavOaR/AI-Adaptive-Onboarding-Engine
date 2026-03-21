@@ -32,8 +32,9 @@ from services import chat_service
 from services.jd_parser import parse_jd
 from models import (
     AnalysisResponse, AnalysisSummary, SkillLevel,
-    GapResult, CourseRecommendation, ReasoningTrace, RoleCandidate
+    GapResult, CourseRecommendation, ReasoningTrace, RoleCandidate, AIInsights
 )
+from services import ai_analyzer
 
 # ─── Logging ──────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -338,6 +339,33 @@ async def analyze(
         "role_candidates": role_candidates,
     }
 
+    # ── 13. AI-powered enhancement (Groq) ───────────────────────────────
+    ai_insights_data = None
+    try:
+        # Enhance skill extraction with AI
+        ai_skills = ai_analyzer.enhance_skill_extraction(
+            resume_text, jd_raw, resume_skills_raw, jd_skills_raw
+        )
+
+        # Use AI skill insights to refine proficiency estimates
+        skill_insights = ai_skills.get("skill_insights", {})
+        hint_map = {"beginner": 1, "intermediate": 2, "advanced": 3, "expert": 4}
+        for cp in candidate_profile:
+            if cp["skill"] in skill_insights:
+                hint = skill_insights[cp["skill"]].get("proficiency_hint", "")
+                ai_level = hint_map.get(hint, 0)
+                if ai_level > 0 and abs(ai_level - cp["level"]) >= 1:
+                    # Blend: average of heuristic and AI estimate
+                    cp["level"] = round((cp["level"] + ai_level) / 2)
+
+        # Generate AI narrative summary
+        ai_insights_data = ai_analyzer.generate_ai_summary(
+            resume_text, jd_raw, gaps, roadmap, summary
+        )
+        logger.info("[analyze] AI insights generated successfully")
+    except Exception as e:
+        logger.warning(f"[analyze] AI enhancement failed (non-fatal): {e}")
+
     logger.info(
         f"[analyze] Done. Role={detected_role_id}, confidence={role_confidence:.2f}, "
         f"gaps={missing} missing / {partial} partial / {matched} matched, "
@@ -351,6 +379,7 @@ async def analyze(
         roadmap=[CourseRecommendation(**c) for c in roadmap],
         reasoning_trace=[ReasoningTrace(**t) for t in traces],
         summary=AnalysisSummary(**summary),
+        ai_insights=AIInsights(**ai_insights_data) if ai_insights_data else None,
     )
 
 
@@ -392,6 +421,25 @@ async def chat(request: Request, _user=Depends(verify_jwt)):
             yield chunk
 
     return StreamingResponse(generate(), media_type="text/plain")
+
+
+@app.get("/challenge/{challenge_id}")
+async def get_challenge(challenge_id: str):
+    """Generate AI-powered challenge content for a given challenge ID."""
+    from services.challenge_generator import generate_challenge_content
+
+    # Load challenges from the frontend data
+    challenges_path = Path(__file__).parent.parent / "frontend" / "src" / "data" / "challenges.json"
+    if not challenges_path.exists():
+        raise HTTPException(status_code=404, detail="Challenges data not found")
+
+    challenges = json.loads(challenges_path.read_text(encoding="utf-8"))
+    challenge = next((c for c in challenges if c["id"] == challenge_id), None)
+    if not challenge:
+        raise HTTPException(status_code=404, detail=f"Challenge {challenge_id} not found")
+
+    result = generate_challenge_content(challenge)
+    return result
 
 
 @app.get("/health")

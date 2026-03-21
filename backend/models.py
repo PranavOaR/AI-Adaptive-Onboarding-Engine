@@ -80,6 +80,15 @@ class ReasoningTrace(BaseModel):
     candidate_confidence: float = 0.0
 
 
+class AIInsights(BaseModel):
+    strengths: List[str] = []
+    improvement_areas: List[str] = []
+    action_plan: str = ""
+    overall_assessment: str = ""
+    resume_tips: List[str] = []
+    interview_focus: List[str] = []
+
+
 class AnalysisSummary(BaseModel):
     total_skills_required: int
     matched_count: int
@@ -101,3 +110,4 @@ class AnalysisResponse(BaseModel):
     roadmap: List[CourseRecommendation]
     reasoning_trace: List[ReasoningTrace]
     summary: AnalysisSummary
+    ai_insights: Optional[AIInsights] = None

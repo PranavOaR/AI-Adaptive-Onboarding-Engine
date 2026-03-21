@@ -3,21 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --surface-0: #0A0A0A;
-  --surface-1: #111111;
-  --surface-2: #161616;
-  --surface-3: #1C1C1C;
-  --border: #1A1A1A;
-  --border-subtle: #141414;
-  --accent: #3B82F6;
-  --accent-hover: #2563EB;
-  --text-primary: #FAFAFA;
-  --text-body: #D4D4D4;
-  --text-muted: #888888;
-  --text-dim: #555555;
-  --success: #22C55E;
-  --warning: #EAB308;
-  --error: #EF4444;
+  --surface-0:    #faf8ff;
+  --surface-1:    #f2f3ff;
+  --surface-2:    #eaedff;
+  --surface-3:    #e2e7ff;
+  --border:       #c2c6d6;
+  --border-subtle:#dae2fd;
+  --accent:       #0058be;
+  --accent-hover: #004395;
+  --text-primary: #131b2e;
+  --text-body:    #424754;
+  --text-muted:   #727785;
+  --text-dim:     #9ca3af;
+  --success:      #22C55E;
+  --warning:      #EAB308;
+  --error:        #EF4444;
+  --primary:      #0058be;
+  --primary-container: #2170e4;
+  --on-surface:   #131b2e;
+  --surface-container-low: #f2f3ff;
+  --surface-container: #eaedff;
+  --outline-variant: #c2c6d6;
 }
 
 * {
@@ -39,11 +45,48 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Material Symbols ─────────────────────────────────────────────── */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* ── Code font ────────────────────────────────────────────────────── */
+.code-font {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Glass panel ───────────────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(250, 248, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Gradient text ─────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(to right, #0058be, #2170e4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Gradient button ───────────────────────────────────────────────── */
+.gradient-btn {
+  background: linear-gradient(to right, #0058be, #2170e4);
+}
+
+/* ── Ghost border ──────────────────────────────────────────────────── */
+.ghost-border {
+  outline: 1px solid rgba(194, 198, 214, 0.2);
+}
+
 /* ── Card ──────────────────────────────────────────────────────────── */
 .card {
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   transition: background 0.2s ease;
 }
 .card:hover {
@@ -52,30 +95,30 @@ body {
 .card-static {
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 /* ── Pill badges ───────────────────────────────────────────────────── */
 .pill {
   font-size: 0.7rem;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 9999px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   letter-spacing: 0.02em;
 }
-.pill-success { background: rgba(34, 197, 94, 0.1); color: var(--success); }
-.pill-warning { background: rgba(234, 179, 8, 0.1); color: var(--warning); }
-.pill-error   { background: rgba(239, 68, 68, 0.1); color: var(--error); }
-.pill-neutral { background: rgba(136, 136, 136, 0.08); color: var(--text-muted); }
-.pill-accent  { background: rgba(59, 130, 246, 0.1); color: var(--accent); }
+.pill-success { background: rgba(34, 197, 94, 0.12); color: #15803d; }
+.pill-warning { background: rgba(234, 179, 8, 0.12); color: #a16207; }
+.pill-error   { background: rgba(186, 26, 26, 0.1);  color: #ba1a1a; }
+.pill-neutral { background: var(--surface-2);         color: var(--text-muted); }
+.pill-accent  { background: rgba(0, 88, 190, 0.08);  color: var(--accent); }
 
 /* ── Skill bars ────────────────────────────────────────────────────── */
 .bar-track {
   height: 4px;
-  background: var(--surface-0);
+  background: var(--surface-2);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -93,24 +136,40 @@ body {
 
 /* ── Drop zone ─────────────────────────────────────────────────────── */
 .drop-zone {
-  border: 1px dashed var(--border);
-  border-radius: 10px;
+  border: 2px dashed rgba(0, 88, 190, 0.2);
+  border-radius: 12px;
   transition: border-color 0.15s ease, background 0.15s ease;
+  background: white;
 }
 .drop-zone:hover,
 .drop-zone.drag-over {
-  border-color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(0, 88, 190, 0.5);
+  background: rgba(0, 88, 190, 0.02);
 }
 
 /* ── Custom scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--surface-0); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
 /* ── Selection ─────────────────────────────────────────────────────── */
 ::selection {
-  background: rgba(59, 130, 246, 0.25);
+  background: rgba(0, 88, 190, 0.15);
   color: var(--text-primary);
 }
+
+/* ── Reveal on scroll ──────────────────────────────────────────────── */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }

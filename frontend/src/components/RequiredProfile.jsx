@@ -1,55 +1,24 @@
-import { useEffect, useRef } from 'react'
-import { useScrollReveal, animateBars } from '../hooks/useScrollAnimation'
-
 export default function RequiredProfile({ profile }) {
-  const sectionRef = useRef()
-  useScrollReveal(sectionRef)
-
-  useEffect(() => {
-    if (profile?.length) {
-      const timer = setTimeout(() => animateBars(sectionRef.current), 300)
-      return () => clearTimeout(timer)
-    }
-  }, [profile])
-
   if (!profile?.length) return null
 
   return (
-    <section ref={sectionRef} className="py-14 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold text-text-primary mb-1">
-            Required Profile
-          </h2>
-          <p className="text-sm text-text-muted">Skills required by the job description</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {profile.map((skill) => (
-            <div key={skill.skill} className="card p-5 reveal-item">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium text-text-primary">
-                  {skill.skill.replace(/_/g, ' ')}
-                </span>
-                <span className="text-xs text-text-muted">
-                  Level {skill.level}/4
-                </span>
-              </div>
-              <div className="bar-track">
-                <div
-                  className="bar-fill bg-warning"
-                  data-width={skill.level * 25}
-                />
-              </div>
-              {skill.evidence?.[0] && (
-                <p className="text-xs text-text-dim mt-2.5 leading-relaxed line-clamp-2">
-                  &ldquo;{skill.evidence[0]}&rdquo;
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+    <div className="bg-surface-container-low p-8 rounded-xl space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold tracking-tight text-on-surface font-headline">Required Profile</h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-on-surface-variant">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
       </div>
-    </section>
+      <div className="flex flex-wrap gap-2">
+        {profile.map((skill) => (
+          <span
+            key={skill.skill}
+            className="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1.5 rounded-full text-xs font-semibold"
+          >
+            {skill.skill.replace(/_/g, ' ')}
+          </span>
+        ))}
+      </div>
+    </div>
   )
 }
