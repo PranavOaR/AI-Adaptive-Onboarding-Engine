@@ -69,7 +69,7 @@ export default function AuthModal({ initialMode = 'login', onClose }) {
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <span className="text-xs text-text-dim block mb-1">skilo</span>
+              <span className="text-xs text-text-dim block mb-1">AI Adaptive Onboarding Engine</span>
               <h2 className="text-base font-medium text-text-primary">
                 {mode === 'login' ? 'Sign in' : 'Create account'}
               </h2>

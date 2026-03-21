@@ -55,12 +55,33 @@
   },
   {
     "id": "CH007",
-    "title": "Pandas Data Cleaning",
-    "description": "Given a CSV, write a Pandas script to drop rows with NaN in the 'Price' column and normalize the 'Name' column to lowercase.",
+    "title": "Python Data Cleaning",
+    "description": "Given a list of dictionaries representing products, write a Python function to drop records where 'Price' is None and normalize the 'Name' string to lowercase.",
     "difficulty": "beginner",
     "duration_minutes": 15,
-    "skills": ["pandas", "python", "data_analytics"],
-    "challenge_type": "coding_framework"
+    "skills": ["python", "data_analytics"],
+    "challenge_type": "coding_framework",
+    "starterCode": {
+      "python": "import json\n\ndef clean_data(records):\n    # 1. Drop dicts where 'Price' is None\n    # 2. Normalize 'Name' to lowercase\n    # Return the new list\n    pass\n\n# --- DO NOT MODIFY BELOW ---\nimport sys\nif __name__ == '__main__':\n    input_data = sys.stdin.read().strip()\n    if input_data:\n        try:\n            result = clean_data(json.loads(input_data))\n            print(json.dumps(result).replace(' ', ''))\n        except Exception as e:\n            print(e)"
+    },
+    "testCases": [
+      {
+        "input": "[{\"Name\": \"APPLE\", \"Price\": 1.2}, {\"Name\": \"Banana\", \"Price\": null}]",
+        "expectedOutput": "[{\"Name\":\"apple\",\"Price\":1.2}]"
+      }
+    ],
+    "examples": [
+      {
+        "input": "[{\"Name\": \"APPLE\", \"Price\": 1.2}, {\"Name\": \"Banana\", \"Price\": null}]",
+        "output": "[{\"Name\": \"apple\", \"Price\": 1.2}]",
+        "explanation": "The record for 'Banana' is dropped because its price is null. 'APPLE' is lowercased to 'apple'."
+      }
+    ],
+    "constraints": [
+      "The input is a list of dictionaries.",
+      "Return the cleaned list of dictionaries."
+    ],
+    "tags": ["lists", "dictionaries", "data-cleaning"]
   },
   {
     "id": "CH008",

@@ -30,7 +30,7 @@ export default function Navbar({ variant = 'landing', onOpenAuth, user, onNewAna
     >
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link to="/" className="text-sm font-semibold text-text-primary tracking-tight hover:opacity-70 transition-opacity">
-          skilo
+          AI Adaptive Onboarding Engine
         </Link>
 
         {variant === 'landing' && (

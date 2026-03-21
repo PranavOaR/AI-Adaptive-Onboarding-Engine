@@ -91,32 +91,11 @@ export default function Dashboard() {
 
       {state === 'results' && data && (
         <div className="pt-16">
-          {/* Results top bar */}
-          <div className="sticky top-16 z-30 bg-surface-1/90 backdrop-blur-md border-b border-border">
-            <div className="max-w-6xl mx-auto px-6 py-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-text-dim">{data.summary.total_skills_required} skills analyzed</span>
-                {completionRate > 0 && (
-                  <span className="pill pill-success text-xs">{Math.round(completionRate)}% complete</span>
-                )}
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleExport}
-                  disabled={exporting}
-                  className="text-xs text-text-muted hover:text-accent transition-colors disabled:opacity-40 flex items-center gap-1.5"
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {exporting ? 'Exporting…' : 'Download PDF'}
-                </button>
-                <button onClick={handleReset} className="text-xs text-text-muted hover:text-text-primary transition-colors">
-                  New analysis
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <SummaryBanner summary={data.summary} />
+          <SummaryBanner 
+            summary={data.summary} 
+            onDownloadPDF={handleExport}
+            isExporting={exporting}
+          />
           <CandidateProfile profile={data.candidate_profile} />
           <RequiredProfile profile={data.required_profile} />
           <GapMatrix gaps={data.gaps} />
@@ -130,7 +109,7 @@ export default function Dashboard() {
 
           <footer className="py-10 px-6 border-t border-border">
             <div className="max-w-6xl mx-auto text-center">
-              <p className="text-sm text-text-dim">Skilo · Skill gap intelligence</p>
+              <p className="text-sm text-text-dim">AI Adaptive Onboarding Engine · Skill gap intelligence</p>
             </div>
           </footer>
 

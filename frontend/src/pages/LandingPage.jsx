@@ -62,7 +62,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-border py-10 px-6">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-text-dim">skilo</span>
+          <span className="text-xs text-text-dim">AI Adaptive Onboarding Engine</span>
           <p className="text-xs text-text-dim">Skill gap intelligence</p>
           <a
             href="https://github.com/PranavOaR/AI-Adaptive-Onboarding-Engine"

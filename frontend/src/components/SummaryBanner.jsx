@@ -70,19 +70,30 @@ function StatChip({ value, label, color }) {
   )
 }
 
-export default function SummaryBanner({ summary }) {
+export default function SummaryBanner({ summary, onDownloadPDF, isExporting }) {
   if (!summary) return null
 
   return (
     <section className="py-16 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-text-primary mb-1">
-            Analysis Summary
-          </h2>
-          <p className="text-sm text-text-muted">
-            Overview of your skill alignment with the target role
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-2xl font-semibold text-text-primary mb-1">
+              Analysis Summary
+            </h2>
+            <p className="text-sm text-text-muted">
+              Overview of your skill alignment with the target role ({summary.total_skills_required} skills analyzed)
+            </p>
+          </div>
+          
+          <button
+            onClick={onDownloadPDF}
+            disabled={isExporting}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-surface-1 border border-border rounded-lg text-sm font-medium text-text-primary hover:bg-surface-2 transition-colors disabled:opacity-50"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            {isExporting ? 'Generating PDF...' : 'Download PDF Report'}
+          </button>
         </div>
 
         <div className="card-static p-8">

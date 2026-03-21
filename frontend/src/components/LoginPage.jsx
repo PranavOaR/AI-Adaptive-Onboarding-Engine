@@ -25,9 +25,12 @@ export default function LoginPage({ onSwitch }) {
     <div className="min-h-screen bg-surface-0 flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <p className="text-sm font-medium text-accent tracking-wide mb-3">
-            Skilo
-          </p>
+          <span className="inline-flex items-center justify-center gap-2 text-sm font-medium text-accent tracking-wide mb-3">
+            <div className="w-5 h-5 rounded border border-accent/30 bg-accent/10 flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-accent" />
+            </div>
+            AI Adaptive Onboarding Engine
+          </span>
           <h1 className="text-2xl font-semibold text-text-primary">
             Welcome back
           </h1>

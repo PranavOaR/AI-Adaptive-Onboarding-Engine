@@ -195,7 +195,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
           <h2 className="text-base font-semibold text-text-primary">{problem.title}</h2>
 
           <div className="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">
-            {problem.description.replace(/`([^`]+)`/g, '$1')}
+            {problem.description?.replace(/`([^`]+)`/g, '$1')}
           </div>
 
           <div>
@@ -268,7 +268,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
             </button>
 
             <span className="text-xs text-text-dim ml-auto">
-              {problem.skills.map((s) => s.replace(/_/g, ' ')).join(' / ')}
+              {problem.skills?.map((s) => s.replace(/_/g, ' ')).join(' / ') || ''}
             </span>
           </div>
 
