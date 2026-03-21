@@ -1,0 +1,107 @@
+{
+  "default": {
+    "technical": [
+      "Explain the difference between supervised and unsupervised learning.",
+      "What is the CAP theorem and how does it affect distributed system design?",
+      "Walk me through how you would design a URL shortener at scale.",
+      "What is the difference between concurrency and parallelism?",
+      "Describe your approach to debugging a production issue with no error logs."
+    ],
+    "behavioral": [
+      "Describe a time you had to learn a new technology quickly. How did you approach it?",
+      "Tell me about a project where you disagreed with a teammate. How was it resolved?",
+      "Give an example of a situation where you had to manage multiple competing priorities.",
+      "Describe a time you received critical feedback. How did you respond?",
+      "Tell me about your most challenging technical project and what you learned from it."
+    ],
+    "scenario": [
+      "You notice a security vulnerability in a production system. What do you do?",
+      "A critical deploy is failing 30 minutes before a major demo. Walk me through your response.",
+      "You inherit a legacy codebase with no documentation. How do you get up to speed?"
+    ]
+  },
+  "skill_questions": {
+    "python": [
+      "What is the GIL and how does it affect multithreading in Python?",
+      "Explain generators and when you would use them over a list.",
+      "How does Python manage memory? What is reference counting?",
+      "What are decorators and how do you implement one?",
+      "Describe the difference between `__str__` and `__repr__`."
+    ],
+    "machine_learning": [
+      "How do you handle class imbalance in a classification problem?",
+      "Explain the bias-variance tradeoff in your own words.",
+      "What is regularization and when would you use L1 vs L2?",
+      "How would you choose between a random forest and a neural network for a given problem?",
+      "Describe how you would evaluate a recommendation system."
+    ],
+    "react": [
+      "Explain the React reconciliation algorithm.",
+      "When would you use `useCallback` vs `useMemo`?",
+      "What is the difference between controlled and uncontrolled components?",
+      "How do you handle side effects in React?",
+      "Describe your approach to state management in a large React app."
+    ],
+    "system_design": [
+      "How would you design a distributed message queue?",
+      "Walk me through designing a rate limiter for an API.",
+      "How would you build a real-time notification system for 10 million users?",
+      "Describe the trade-offs between SQL and NoSQL databases.",
+      "How would you design the backend for a social media feed?"
+    ],
+    "docker": [
+      "What is the difference between a Docker image and a container?",
+      "Explain multi-stage builds and their benefits.",
+      "How does Docker networking work?",
+      "What are the best practices for writing a Dockerfile?",
+      "How would you debug a containerised application that is failing silently?"
+    ],
+    "kubernetes": [
+      "Explain the difference between a Deployment and a StatefulSet.",
+      "How does Kubernetes handle zero-downtime deployments?",
+      "What is a Kubernetes Ingress and how does it differ from a Service?",
+      "Describe how you would configure horizontal pod autoscaling.",
+      "How would you troubleshoot a pod that is stuck in CrashLoopBackOff?"
+    ],
+    "sql": [
+      "What is the difference between an INNER JOIN and a LEFT JOIN?",
+      "Explain database indexing and when you would add an index.",
+      "What is a database transaction and what does ACID mean?",
+      "How do you optimise a slow SQL query?",
+      "Describe the difference between normalisation and denormalisation."
+    ],
+    "data_structures": [
+      "When would you use a hash map vs a balanced BST?",
+      "Explain the time complexity of common operations on a linked list.",
+      "What is a heap and when would you use one?",
+      "Describe the difference between BFS and DFS and their use cases.",
+      "What is dynamic programming and how do you identify when to apply it?"
+    ]
+  },
+  "role_questions": {
+    "ml_intern": [
+      "How would you set up an ML experiment tracking workflow?",
+      "Describe the steps to take a model from notebook to production.",
+      "What metrics would you use to evaluate a text classification model?",
+      "How do you ensure reproducibility in ML experiments?"
+    ],
+    "frontend_intern": [
+      "How do you approach cross-browser compatibility issues?",
+      "What is your process for ensuring a web app is accessible?",
+      "How do you optimise the performance of a React application?",
+      "Describe your approach to responsive design."
+    ],
+    "backend_intern": [
+      "How do you design a RESTful API? What conventions do you follow?",
+      "How would you handle database migrations in a production system?",
+      "Describe your approach to API versioning.",
+      "How do you test backend services effectively?"
+    ],
+    "devops_intern": [
+      "Explain the difference between CI and CD.",
+      "How would you set up a monitoring and alerting pipeline?",
+      "What is infrastructure as code and what tools have you used?",
+      "How do you approach secret management in a cloud environment?"
+    ]
+  }
+}

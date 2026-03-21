@@ -60,7 +60,7 @@ export default function App() {
               <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-medium text-text-primary">
-                    Onboarding Engine
+                    Skilo
                   </span>
                   <span className="text-xs text-text-dim">
                     {data.summary.total_skills_required} skills analyzed
@@ -99,7 +99,7 @@ export default function App() {
             <footer className="py-10 px-6 border-t border-border">
               <div className="max-w-6xl mx-auto text-center">
                 <p className="text-sm text-text-dim">
-                  AI Onboarding Engine &middot; Evidence-grounded skill analysis
+                  Skilo &middot; Skill gap intelligence
                 </p>
               </div>
             </footer>

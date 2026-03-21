@@ -26,7 +26,7 @@ export default function LoginPage({ onSwitch }) {
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
           <p className="text-sm font-medium text-accent tracking-wide mb-3">
-            AI Onboarding Engine
+            Skilo
           </p>
           <h1 className="text-2xl font-semibold text-text-primary">
             Welcome back

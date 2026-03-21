@@ -5,3 +5,7 @@ PyMuPDF
 python-docx
 pydantic>=2.0
 python-jose[cryptography]
+
+reportlab
+groq
+python-dotenv

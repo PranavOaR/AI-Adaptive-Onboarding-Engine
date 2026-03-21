@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --surface-0: #111318;
-  --surface-1: #1A1D25;
-  --surface-2: #22252E;
-  --surface-3: #2A2D36;
-  --border: #2E313A;
-  --border-subtle: #23262E;
-  --accent: #818CF8;
-  --accent-hover: #6366F1;
-  --text-primary: #F9FAFB;
-  --text-body: #D1D5DB;
-  --text-muted: #9CA3AF;
-  --text-dim: #6B7280;
-  --success: #34D399;
-  --warning: #FBBF24;
-  --error: #F87171;
+  --surface-0: #0A0A0A;
+  --surface-1: #111111;
+  --surface-2: #161616;
+  --surface-3: #1C1C1C;
+  --border: #1A1A1A;
+  --border-subtle: #141414;
+  --accent: #3B82F6;
+  --accent-hover: #2563EB;
+  --text-primary: #FAFAFA;
+  --text-body: #D4D4D4;
+  --text-muted: #888888;
+  --text-dim: #555555;
+  --success: #22C55E;
+  --warning: #EAB308;
+  --error: #EF4444;
 }
 
 * {
@@ -39,81 +39,78 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── Card ─────────────────────────────────────────────────────────────── */
+/* ── Card ──────────────────────────────────────────────────────────── */
 .card {
-  background: var(--surface-2);
+  background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 10px;
+  transition: background 0.2s ease;
 }
 .card:hover {
-  background: var(--surface-3);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  background: var(--surface-2);
 }
 .card-static {
-  background: var(--surface-2);
+  background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
-/* ─── Pill badges ──────────────────────────────────────────────────────── */
+/* ── Pill badges ───────────────────────────────────────────────────── */
 .pill {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  padding: 3px 10px;
-  border-radius: 9999px;
+  padding: 2px 8px;
+  border-radius: 4px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  letter-spacing: 0.02em;
 }
-.pill-success { background: rgba(52, 211, 153, 0.1); color: var(--success); }
-.pill-warning { background: rgba(251, 191, 36, 0.1); color: var(--warning); }
-.pill-error   { background: rgba(248, 113, 113, 0.1); color: var(--error); }
-.pill-neutral { background: rgba(156, 163, 175, 0.08); color: var(--text-muted); }
-.pill-accent  { background: rgba(129, 140, 248, 0.1); color: var(--accent); }
+.pill-success { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+.pill-warning { background: rgba(234, 179, 8, 0.1); color: var(--warning); }
+.pill-error   { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+.pill-neutral { background: rgba(136, 136, 136, 0.08); color: var(--text-muted); }
+.pill-accent  { background: rgba(59, 130, 246, 0.1); color: var(--accent); }
 
-/* ─── Skill bars ───────────────────────────────────────────────────────── */
+/* ── Skill bars ────────────────────────────────────────────────────── */
 .bar-track {
-  height: 6px;
+  height: 4px;
   background: var(--surface-0);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 .bar-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 2px;
   width: 0;
   transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ─── Radial gauge ─────────────────────────────────────────────────────── */
+/* ── Radial gauge ──────────────────────────────────────────────────── */
 .gauge-circle {
   transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ─── Drop zone ────────────────────────────────────────────────────────── */
+/* ── Drop zone ─────────────────────────────────────────────────────── */
 .drop-zone {
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 .drop-zone:hover,
 .drop-zone.drag-over {
-  border-color: var(--accent);
-  background: rgba(129, 140, 248, 0.04);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
 }
 
-/* ─── Custom scrollbar ─────────────────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--surface-0);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
+/* ── Custom scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--surface-0); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* ── Selection ─────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(59, 130, 246, 0.25);
+  color: var(--text-primary);
 }

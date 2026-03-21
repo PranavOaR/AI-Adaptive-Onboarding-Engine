@@ -5,9 +5,16 @@ import logging
 import re
 from pathlib import Path
 
+# Load .env file if present (for GROQ_API_KEY etc.)
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent / ".env")
+except ImportError:
+    pass
+
 from fastapi import FastAPI, File, UploadFile, Form, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from middleware.auth import verify_jwt
 from services import (
@@ -19,6 +26,9 @@ from services import (
     reasoning_service,
     assessment_router,
 )
+from services.export_service import generate_pdf
+from services.interview_service import generate_questions
+from services import chat_service
 from services.jd_parser import parse_jd
 from models import (
     AnalysisResponse, AnalysisSummary, SkillLevel,
@@ -342,6 +352,46 @@ async def analyze(
         reasoning_trace=[ReasoningTrace(**t) for t in traces],
         summary=AnalysisSummary(**summary),
     )
+
+
+@app.post("/export")
+async def export_report(request: Request, _user=Depends(verify_jwt)):
+    """Generate and stream a PDF report for the given analysis data."""
+    data = await request.json()
+    pdf_bytes = generate_pdf(data)
+    return StreamingResponse(
+        iter([pdf_bytes]),
+        media_type="application/pdf",
+        headers={"Content-Disposition": 'attachment; filename="onboarding-report.pdf"'},
+    )
+
+
+@app.post("/interview-prep")
+async def interview_prep(request: Request, _user=Depends(verify_jwt)):
+    """Return role-specific interview questions based on gaps."""
+    body = await request.json()
+    role = body.get("role")
+    gaps = body.get("gaps", [])
+    questions = generate_questions(role, gaps)
+    return {"questions": questions}
+
+
+@app.post("/chat")
+async def chat(request: Request, _user=Depends(verify_jwt)):
+    """Stream a chat response from the Groq-powered assistant."""
+    body = await request.json()
+    message = body.get("message", "")
+    history = body.get("history", [])
+    analysis_context = body.get("analysisContext")
+
+    if not message.strip():
+        raise HTTPException(status_code=400, detail="Message cannot be empty")
+
+    def generate():
+        for chunk in chat_service.stream_chat(message, history, analysis_context):
+            yield chunk
+
+    return StreamingResponse(generate(), media_type="text/plain")
 
 
 @app.get("/health")

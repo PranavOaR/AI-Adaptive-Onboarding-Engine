@@ -67,7 +67,7 @@ export default function HeroUpload({ onSubmit }) {
       <div className="relative z-10 max-w-2xl w-full">
         <div className="text-center mb-14">
           <p className="text-sm font-medium text-accent tracking-wide mb-4">
-            AI Onboarding Engine
+            Skilo
           </p>
           <h1 className="text-4xl md:text-5xl font-semibold text-text-primary leading-tight mb-5">
             Show me who I am,

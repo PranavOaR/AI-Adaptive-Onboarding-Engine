@@ -1,7 +1,9 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, lazy, Suspense } from 'react'
 import { useScrollReveal, animateCount } from '../hooks/useScrollAnimation'
-import ChallengeArena from './ChallengeArena'
+import { useProgress } from '../hooks/useProgress'
 import challenges from '../data/challenges.json'
+
+const ChallengeArena = lazy(() => import('./ChallengeArena'))
 
 const PHASE_COLORS = {
   Foundation: { text: 'text-success', bg: 'bg-success', border: 'border-success' },
@@ -24,10 +26,11 @@ challenges.forEach((ch) => {
   })
 })
 
-export default function RoadmapTimeline({ roadmap, gaps }) {
+export default function RoadmapTimeline({ roadmap, gaps, userId, role }) {
   const sectionRef = useRef()
   const hoursRef = useRef()
   const [activeChallengeId, setActiveChallengeId] = useState(null)
+  const { markComplete, isComplete, getCompletionRate } = useProgress(role || '', userId || '')
 
   useScrollReveal(sectionRef)
 
@@ -62,16 +65,17 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-xl font-semibold text-text-primary mb-1">
-                Learning Roadmap
-              </h2>
+              <h2 className="text-xl font-semibold text-text-primary mb-1">Learning Roadmap</h2>
               <p className="text-sm text-text-muted">Personalized learning path based on your gaps</p>
             </div>
-            <div className="card-static px-4 py-2.5 flex items-center gap-2">
-              <span className="text-xs text-text-muted">Total</span>
-              <span ref={hoursRef} className="text-base font-bold text-accent">
-                0h
-              </span>
+            <div className="flex items-center gap-3">
+              {getCompletionRate(roadmap) > 0 && (
+                <span className="pill pill-success text-xs">{Math.round(getCompletionRate(roadmap))}% complete</span>
+              )}
+              <div className="card-static px-4 py-2.5 flex items-center gap-2">
+                <span className="text-xs text-text-muted">Total</span>
+                <span ref={hoursRef} className="text-base font-bold text-accent">0h</span>
+              </div>
             </div>
           </div>
 
@@ -96,6 +100,8 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
                   {/* Course cards with left border connector */}
                   <div className={`space-y-3 ml-5 border-l ${colors.border}/30 pl-6`}>
                     {courses.map((course) => {
+                      const courseId = course.course_id || course.id
+                      const done = isComplete(courseId)
                       const courseSkills = course.skills || course.skills_addressed || []
                       const challengeSkill = courseSkills.find(
                         (s) => skillToChallengeId[s] && gapSkills.has(s)
@@ -103,19 +109,32 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
                       const challengeId = challengeSkill ? skillToChallengeId[challengeSkill] : null
 
                       return (
-                        <div key={course.id} className="card p-5 relative">
+                        <div key={courseId} className={`card p-5 relative transition-opacity duration-300 ${done ? 'opacity-60' : ''}`}>
                           {/* Dot on the connector line */}
                           <div
-                            className={`absolute -left-[27px] top-6 w-2.5 h-2.5 rounded-full ${colors.bg} ring-2 ring-surface-0`}
+                            className={`absolute -left-[27px] top-6 w-2.5 h-2.5 rounded-full ${done ? 'bg-success' : colors.bg} ring-2 ring-surface-0 transition-colors`}
                           />
 
                           <div className="flex items-start justify-between mb-2">
-                            <h4 className="text-base font-medium text-text-primary leading-snug pr-2">
+                            <h4 className={`text-base font-medium leading-snug pr-2 ${done ? 'line-through text-text-muted' : 'text-text-primary'}`}>
                               {course.title}
                             </h4>
-                            <span className={`pill ${DIFFICULTY_PILL[course.difficulty] || 'pill-neutral'} shrink-0`}>
-                              {course.difficulty}
-                            </span>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className={`pill ${DIFFICULTY_PILL[course.difficulty] || 'pill-neutral'}`}>
+                                {course.difficulty}
+                              </span>
+                              <button
+                                onClick={() => markComplete(courseId)}
+                                title={done ? 'Mark incomplete' : 'Mark complete'}
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                  done ? 'border-success bg-success/20' : 'border-border hover:border-success'
+                                }`}
+                              >
+                                {done && (
+                                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#34D399" strokeWidth="2.5"><polyline points="2,6 5,9 10,3"/></svg>
+                                )}
+                              </button>
+                            </div>
                           </div>
 
                           <div className="flex items-center gap-3 mb-3">
@@ -172,10 +191,12 @@ export default function RoadmapTimeline({ roadmap, gaps }) {
       </section>
 
       {activeChallengeId && (
-        <ChallengeArena
-          challengeId={activeChallengeId}
-          onClose={() => setActiveChallengeId(null)}
-        />
+        <Suspense fallback={<div className="fixed inset-0 bg-surface-0 flex items-center justify-center"><p className="text-text-muted text-sm">Loading editor…</p></div>}>
+          <ChallengeArena
+            challengeId={activeChallengeId}
+            onClose={() => setActiveChallengeId(null)}
+          />
+        </Suspense>
       )}
     </>
   )
