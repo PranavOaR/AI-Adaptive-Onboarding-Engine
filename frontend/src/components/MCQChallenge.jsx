@@ -14,7 +14,13 @@ export default function MCQChallenge({ challenge, onClose }) {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(null)
 
-  const questions = challenge.questions || []
+  const questions = challenge.questions || (challenge.options ? [{
+    id: challenge.id,
+    text: challenge.description,
+    options: challenge.options,
+    correct_index: challenge.correct_index,
+    explanation: challenge.explanations ? challenge.explanations[challenge.correct_index] : ''
+  }] : [])
 
   const handleSelect = (qid, idx) => {
     if (submitted) return

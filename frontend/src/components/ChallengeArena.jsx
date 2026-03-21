@@ -91,7 +91,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
       const body = {
         source_code: code,
         language_id: JUDGE0_LANGUAGE_IDS[language],
-        stdin: problem.testCases[0]?.input || '',
+        stdin: problem.testCases?.[0]?.input || '',
       }
 
       const response = await fetch('/judge0/submissions?base64_encoded=false&wait=true', {
@@ -123,7 +123,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
         term.writeln('\x1b[90m(no output)\x1b[0m')
       }
 
-      const expected = problem.testCases[0]?.expectedOutput?.trim()
+      const expected = problem.testCases?.[0]?.expectedOutput?.trim()
       const actual = (result.stdout || '').trim()
       const firstLine = actual.split('\n')[0]
       const passed = expected ? firstLine === expected || actual === expected : false
@@ -202,7 +202,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
             <p className="text-xs font-medium text-text-muted mb-2">
               Examples
             </p>
-            {problem.examples.map((ex, i) => (
+            {problem.examples?.map((ex, i) => (
               <div key={i} className="card-static p-3 mb-2">
                 <p className="text-xs text-text-muted mb-1">Input:</p>
                 <p className="text-xs text-text-primary bg-surface-0 px-2 py-1 rounded-md mb-2 break-all font-mono">
@@ -222,7 +222,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
               Constraints
             </p>
             <ul className="space-y-1">
-              {problem.constraints.map((c, i) => (
+              {problem.constraints?.map((c, i) => (
                 <li key={i} className="text-xs text-text-muted flex gap-2">
                   <span className="text-text-dim shrink-0">-</span> {c}
                 </li>
@@ -231,7 +231,7 @@ export default function ChallengeArena({ challengeId, onClose }) {
           </div>
 
           <div className="flex flex-wrap gap-1.5">
-            {problem.tags.map((tag) => (
+            {problem.tags?.map((tag) => (
               <span
                 key={tag}
                 className="text-xs px-2 py-0.5 bg-surface-0 border border-border-subtle rounded-md text-text-dim"
