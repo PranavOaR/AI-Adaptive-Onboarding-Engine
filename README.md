@@ -6,7 +6,7 @@ Built with a **Mission Control** dark aesthetic featuring monospace typography, 
 
 ---
 
-## Architecture
+## Architecture 
 
 ```
 Browser (port 5173)
