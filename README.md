@@ -5,7 +5,7 @@ A full-stack web application that ingests a candidate's resume and a job descrip
 Built with a **Mission Control** dark aesthetic featuring monospace typography, cyan/amber/green accent colors, and GSAP scroll animations.
 
 ---
-
+ 
 ## Architecture 
 
 ```
